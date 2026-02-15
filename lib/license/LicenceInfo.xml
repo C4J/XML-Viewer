@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<info>
+
+    <libraries>
+
+        <library>
+            <description>Apache Commons IO</description>
+            <version>2.18</version>
+            <type>Apache Licence 2.0</type>>
+         </library>
+
+        <library>
+            <description>Apache Log4j</description>
+            <version>2.24.3</version>
+            <type>Apache Licence 2.0</type>
+        </library>
+
+    </libraries>
+
+    <licenses>
+
+    	<license>
+    		<type>GNU General Public License V2</type>
+    		<filename>GNU General Public License V2.txt</filename>
+    	</license>
+
+        <license>
+            <type>Apache Licence 2.0</type>
+            <filename>Apache Licence Version 2.0.txt</filename>
+        </license>
+
+        <license>
+            <type>BSD 3-Clause</type>
+            <filename>3-Clause BSD License.txt</filename>
+        </license>
+
+        <license>
+            <type>MIT License</type>
+            <filename>MIT Licence.txt</filename>
+        </license>
+
+    </licenses>
+
+</info>
