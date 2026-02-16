@@ -22,6 +22,6 @@ public class ViewPanel
 	public String toString()
 	{
 		// Only used if no renderer is applied; keep something sensible.
-		return fields.isEmpty() ? "" : fields.getFirst().getName();
+		return fields.isEmpty() ? "" : fields.getFirst().getElementName();
 	}
 }

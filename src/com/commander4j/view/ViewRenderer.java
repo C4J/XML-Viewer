@@ -104,19 +104,19 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 				JLabel lblName = new JLabel();
 				lblName.setFont(NAME_FONT);
 				lblName.setForeground(NAME_COLOR_ACTIVE);
-				lblName.setText(getDisplayName(field));
+				lblName.setText(getElementDisplayName(field));
 				lblName.setBorder(emptyLabel);
 
 				JLabel lblValue = new JLabel();
 				lblValue.setForeground(VALUE_COLOR_ACTIVE);
 				lblValue.setFont(VALUE_FONT);
-				lblValue.setText(getDisplayValue(field));
+				lblValue.setText(getElementDisplayValue(field));
 				lblValue.setBorder(emptyLabel);
 
 				JLabel lblAttribs = new JLabel();
 				lblAttribs.setFont(ATTRIB_FONT);
 				lblAttribs.setForeground(ATTRIB_COLOR_ACTIVE);
-				lblAttribs.setText(field.getAttributes());
+				lblAttribs.setText(field.getAttributesDisplay());
 				lblAttribs.setBorder(emptyLabel);
 
 
@@ -236,9 +236,9 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 		}
 	}
 
-	public String getDisplayName(ViewField field)
+	public String getElementDisplayName(ViewField field)
 	{
-		String result = field.getName();
+		String result = field.getElementName();
 
 		if (ViewTree.xmlTranslations.containsKey("element name:" + result) && isTranslationRequired())
 		{
@@ -248,10 +248,12 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 		return result;
 	}
 
-	public String getDisplayValue(ViewField field)
+
+
+	public String getElementDisplayValue(ViewField field)
 	{
 
-		String result = field.getValue().trim();
+		String result = field.getElementValue().trim();
 
 		if (ViewTree.xmlTranslations.containsKey("element value:" + result) && isTranslationRequired())
 		{
@@ -270,14 +272,14 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 
 	public String getIconFilename(ViewField field)
 	{
-		String result = field.getFilename();
+		String result = field.getElementFilename();
 
 		if (isIconRequired())
 		{
 
-			if (field.getValue().equals("true") || (field.getValue().equals("false")))
+			if (field.getElementValue().equals("true") || (field.getElementValue().equals("false")))
 			{
-				if (field.getValue().equals("true"))
+				if (field.getElementValue().equals("true"))
 				{
 					result = "true.png";
 				}
@@ -289,13 +291,13 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 			else
 			{
 				if (result == null)
-					result = field.getName() + ".png";
+					result = field.getElementName() + ".png";
 
 				if (result.isBlank())
-					result = field.getName() + ".png";
+					result = field.getElementName() + ".png";
 
 				if (result.isEmpty())
-					result = field.getName() + ".png";
+					result = field.getElementName() + ".png";
 			}
 		}
 		else

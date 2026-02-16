@@ -1,11 +1,15 @@
 package com.commander4j.view;
 
 import java.io.File;
+import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,10 +20,43 @@ public class ViewTranslations
 
 	private final Logger logger = org.apache.logging.log4j.LogManager.getLogger(ViewTranslations.class);
 
+	public DefaultComboBoxModel<String>  populateFiles(String current)
+	{
+		String defaultpath = "." + File.separator + "xml" + File.separator + "translations";
+
+		TreeSet<String> fileList = new TreeSet<String>();
+
+		DefaultComboBoxModel<String> DefComboBoxMod = new DefaultComboBoxModel<String>();
+
+		File dir = new File(defaultpath);
+
+		List<File> filenames = (List<File>) FileUtils.listFiles(dir, new String[] {"xml","XML"}, false);
+
+		String selected = null;
+
+		if (filenames.size() > 0)
+		{
+			for (int x = 0;x<filenames.size();x++)
+			{
+				fileList.add(filenames.get(x).getName());
+
+				if (current.equals(filenames.get(x).getName()))
+				{
+					selected = filenames.get(x).getName();
+				}
+			}
+
+			DefComboBoxMod.addAll(fileList);
+
+			DefComboBoxMod.setSelectedItem(selected);
+		}
+
+		return DefComboBoxMod;
+
+	}
+
 	public ConcurrentHashMap<String, String> loadTranslations(String xmlFilePath, String languageCode)
 	{
-
-		logger.debug("loadTranslations xmlFilePath=" + xmlFilePath + "languageCode=" + languageCode);
 
 		ConcurrentHashMap<String, String> translations = new ConcurrentHashMap<>();
 
@@ -73,8 +110,6 @@ public class ViewTranslations
 		{
 			logger.debug(e.getMessage()); // Handle exceptions appropriately
 		}
-
-		logger.debug("translations loaded [" + translations.size() + "]");
 
 		return translations;
 	}

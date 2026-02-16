@@ -11,13 +11,12 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.LinkOption;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,6 +37,7 @@ import org.apache.logging.log4j.Logger;
 import com.commander4j.dialog.JDialogAbout;
 import com.commander4j.dialog.JDialogLicenses;
 import com.commander4j.gui.JButton4j;
+import com.commander4j.gui.JComboBox4j;
 import com.commander4j.gui.JLabel4j_std;
 import com.commander4j.gui.JToggleButton4j;
 import com.commander4j.sys.Common;
@@ -48,14 +48,12 @@ import com.commander4j.util.Utility;
 
 public final class ViewTree extends JFrame
 {
-	public static String version = "1.20";
+	public static String version = "1.21";
 
 	private static final long serialVersionUID = 1L;
 
 	public static ConcurrentHashMap<String, String> xmlTranslations = new ConcurrentHashMap<String, String>();
 
-
-	private String rootNodeName = "default";
 
 	private Utility util = new Utility();
 
@@ -75,6 +73,7 @@ public final class ViewTree extends JFrame
 	private JButton4j btnBlank1;
 	private JButton4j btnBlank2;
 	private JButton4j btnReload;
+	private JButton4j btnRefreshTranslation;
 	private JButton4j btnClear;
 	private JButton4j btnSettings;
 	private JButton4j btnHelp;
@@ -89,6 +88,9 @@ public final class ViewTree extends JFrame
 	private JButton4j btnLevelMinus;
 	private JButton4j btnLevelPlus;
 
+	JLabel4j_std lbl_Translations = new JLabel4j_std("Translation File : ");
+	JComboBox4j<String> combobox_Translations = new JComboBox4j<String>();
+
 	private DefaultTreeModel treeModel;
 
 	private JScrollPane scrollPane;
@@ -97,6 +99,7 @@ public final class ViewTree extends JFrame
 
 	private JSeparator sep = new JSeparator();
 	private JSeparator sep2 = new JSeparator();
+	private JSeparator sep3 = new JSeparator();
 
 	private ViewTranslations viewTranslations = new ViewTranslations();
 
@@ -117,26 +120,61 @@ public final class ViewTree extends JFrame
 	private JLabel4j_std lblTransMode_Status = new JLabel4j_std("");
 	private JLabel4j_std lblBracketMode_Status = new JLabel4j_std("");
 
+	private String current_Translations = "default.xml";
+
 	private int iconSize = 24;
-	private int rowHeight = iconSize+1;
+	private int rowHeight = iconSize + 3;
 
 	private final Logger logger = org.apache.logging.log4j.LogManager.getLogger(ViewTree.class);
 
 	public static void main(String[] args)
 	{
-		ViewTree f = new ViewTree();
+
+		//JOptionPane.showMessageDialog(null, args);
+
+		String filename = "";
+
+		if (args.length > 0)
+		{
+			filename = args[0];
+		}
+
+		ViewTree f = new ViewTree(filename);
+
 		f.setVisible(true);
 	}
 
-	public ViewTree()
+	private File getFileFromString(String filename)
+	{
+		File result = null;
+
+		filename = util.replaceNullStringwithBlank(filename);
+
+		if (filename.equals("") == false)
+		{
+
+			if (FileUtils.isRegularFile(new File(filename), LinkOption.NOFOLLOW_LINKS))
+			{
+				result = new File(filename);
+			}
+
+		}
+
+		return result;
+	}
+
+	public ViewTree(String filename)
 	{
 		util.setLookAndFeel("Nimbus");
 		util.initLogging("");
 
+		loadXML = getFileFromString(filename);
+
 		btnBlank1 = new JButton4j(Common.icon_blank);
-	    btnBlank2 = new JButton4j(Common.icon_blank);
+		btnBlank2 = new JButton4j(Common.icon_blank);
 		btnOpen = new JButton4j(Common.icon_file_open);
 		btnReload = new JButton4j(Common.icon_reload);
+		btnRefreshTranslation = new JButton4j(Common.icon_reload);
 		btnClear = new JButton4j(Common.icon_erase);
 		btnSettings = new JButton4j(Common.icon_settings);
 		btnHelp = new JButton4j(Common.icon_help);
@@ -161,6 +199,10 @@ public final class ViewTree extends JFrame
 		sep2.setAlignmentX(JSeparator.CENTER_ALIGNMENT);
 		sep2.setOrientation(JSeparator.VERTICAL);
 		sep2.setMaximumSize(labelSize);
+
+		sep3.setAlignmentX(JSeparator.CENTER_ALIGNMENT);
+		sep3.setOrientation(JSeparator.VERTICAL);
+		sep3.setMaximumSize(labelSize);
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new CompoundBorder());
@@ -198,7 +240,6 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				openTree();
-
 			}
 		});
 
@@ -211,7 +252,6 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				reloadTree();
-
 			}
 		});
 
@@ -224,7 +264,6 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				clearTree();
-
 			}
 		});
 
@@ -362,7 +401,6 @@ public final class ViewTree extends JFrame
 		btnBlank2.setBackground(Common.color_app_window);
 		toolBarBottom.add(btnBlank2);
 
-
 		lblViewMode.setAlignmentX(JLabel4j_std.RIGHT_ALIGNMENT);
 		lblViewMode.setFont(Common.font_status_bar_label);
 		lblViewMode_Status.setAlignmentX(JLabel4j_std.LEFT_ALIGNMENT);
@@ -464,7 +502,6 @@ public final class ViewTree extends JFrame
 		});
 		toolBarTop.add(btnCollapse);
 
-
 		btnLevelMinus.setPreferredSize(buttonSize);
 		btnLevelMinus.setToolTipText("Reduce Branch Expansion Level");
 		btnLevelMinus.setFocusable(false);
@@ -489,7 +526,43 @@ public final class ViewTree extends JFrame
 		lblLevel.setMaximumSize(labelSize);
 		toolBarTop.add(lblLevel);
 
+		toolBarTop.add(sep3);
+		lbl_Translations.setFont(Common.font_status_bar_label);
+		toolBarTop.add(lbl_Translations);
+		combobox_Translations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
+				current_Translations = (String) combobox_Translations.getSelectedItem();
+				loadTranslations("en");
+				tree.setCellRenderer(new ViewRenderer(iconSize));
+
+			}
+		});
+
+		combobox_Translations.setFont(Common.font_status_bar_label);
+		combobox_Translations.setPreferredSize(new Dimension(200,24));
+		combobox_Translations.setMinimumSize(new Dimension(200,24));
+		combobox_Translations.setMaximumSize(new Dimension(200,24));
+		combobox_Translations.setSize(new Dimension(200,24));
+		combobox_Translations.setModel(viewTranslations.populateFiles(current_Translations));
+
+		toolBarTop.add(combobox_Translations);
+
+		btnRefreshTranslation.setToolTipText("Refresh Translations");
+		toolBarTop.add(btnRefreshTranslation);
+		btnRefreshTranslation.setPreferredSize(buttonSize);
+		btnRefreshTranslation.setFocusable(false);
+		btnRefreshTranslation.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+
+				current_Translations = (String) combobox_Translations.getSelectedItem();
+				loadTranslations("en");
+				tree.setCellRenderer(new ViewRenderer(iconSize));
+
+			}
+		});
 
 		tree = new JTree(new DefaultMutableTreeNode("No document"));
 		tree.setBackground(Common.color_app_window);
@@ -575,29 +648,10 @@ public final class ViewTree extends JFrame
 	private void loadTranslations(String language)
 	{
 
-		String defaultpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + "default.xml";
+		String transpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + current_Translations;
 
-		String transpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + getRootNodeName() + ".xml";
-
-		File translationfolder = new File(transpath);
-
-		logger.debug("translationfolder=" + translationfolder);
-
-		if (!translationfolder.exists())
-		{
-			try
-			{
-
-				FileUtils.copyFile(new File(defaultpath),new File(transpath));
-			}
-			catch (IOException e)
-			{
-
-			}
-		}
 
 		xmlTranslations = nonNullMap(viewTranslations.loadTranslations(transpath, language));
-
 
 	}
 
@@ -627,8 +681,6 @@ public final class ViewTree extends JFrame
 			Load load = new Load();
 
 			treeModel = load.getTreeModel(xmlfile, mode);
-
-			setRootNodeName(load.getRootElementName());
 
 			loadTranslations("en");
 
@@ -685,22 +737,6 @@ public final class ViewTree extends JFrame
 
 	}
 
-	private void setRootNodeName(String name)
-	{
-		rootNodeName = util.replaceNullStringwithBlank(name).toLowerCase();
-	}
-
-	private String getRootNodeName()
-	{
-		rootNodeName = util.replaceNullStringwithBlank(rootNodeName).toLowerCase();
-
-		if (rootNodeName.equals(""))
-		{
-			rootNodeName = "default";
-		}
-
-		return rootNodeName;
-	}
 
 	private File selectLoadTreeXML()
 	{

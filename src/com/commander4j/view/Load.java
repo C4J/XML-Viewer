@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -123,17 +122,11 @@ public class Load
 	{
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode();
 
-		String elementText = directText(element);
-
-		String elementAttributes = getAttributes(element);
-
 		ViewPanel vp = new ViewPanel();
 
-		ViewField vf = new ViewField(element.getNodeName(), elementText, elementAttributes, "");
+		ViewField vf = new ViewField(element);
 
 		vp.addField(vf);
-
-		System.out.println(level + padSpaces(level * 3) + vf);
 
 		node.setUserObject(vp);
 
@@ -163,17 +156,9 @@ public class Load
 
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode();
 
-		String elementText = directText(element);
-
-		String elementAttributes = getAttributes(element);
-
-		String data = element.getNodeName() + " " + elementText + " " + elementAttributes;
-
-		System.out.println(level + padSpaces(level * 3) + data);
-
 		ViewPanel vp = new ViewPanel();
 
-		ViewField vf = new ViewField(element.getNodeName(), elementText, elementAttributes, "");
+		ViewField vf = new ViewField(element);
 
 		vp.addField(vf);
 
@@ -182,8 +167,6 @@ public class Load
 		treeNode.add(node);
 
 		NodeList nodeList = element.getChildNodes();
-
-		String sameLevel = "";
 
 		int nodeCount = nodeList.getLength();
 
@@ -198,22 +181,11 @@ public class Load
 				if (hasChildElements(childElement) == false)
 				{
 
-					String elementTextChild = directText(childElement);
-
-					String elementAttributesChild = getAttributes(childElement);
-
-					String dataChild = childElement.getNodeName() + " " + elementTextChild + " " + elementAttributesChild;
-
-					sameLevel = sameLevel + " " + dataChild;
-
-					ViewField vf2 = new ViewField(childElement.getNodeName(), elementTextChild, elementAttributesChild, "");
+					ViewField vf2 = new ViewField(childElement);
 
 					vp.addField(vf2);
 
-					System.out.println(sameLevel);
-
 					node.setUserObject(vp);
-
 				}
 			}
 		}
@@ -265,57 +237,4 @@ public class Load
 		return result;
 	}
 
-	private String getAttributes(Element elem)
-	{
-		String result = "";
-
-		NamedNodeMap attrs = elem.getAttributes();
-
-		for (int x = 0; x < attrs.getLength(); x++)
-		{
-
-			result = result + attrs.item(x).getNodeName() + "='" + attrs.item(x).getNodeValue() + "' ";
-		}
-
-		result = result.trim();
-
-		return result;
-	}
-
-	public String directText(Element e)
-	{
-		String result = "";
-
-		if (e != null)
-		{
-			NodeList children = e.getChildNodes();
-
-			for (int i = 0; i < children.getLength(); i++)
-			{
-				Node n = children.item(i);
-
-				short t = n.getNodeType();
-
-				if (t == Node.TEXT_NODE || t == Node.CDATA_SECTION_NODE)
-				{
-					result = result + n.getNodeValue();
-				}
-			}
-		}
-
-		result = result.trim();
-
-		return result;
-	}
-
-
-	private String padSpaces(int value)
-	{
-		String result = "";
-		for (int x = 0; x < value; x++)
-		{
-			result = result + " ";
-		}
-		return result;
-	}
 }
