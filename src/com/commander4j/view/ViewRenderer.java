@@ -15,6 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+//import javax.swing.border.LineBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 
@@ -24,9 +27,9 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 {
 	private static final long serialVersionUID = 1L;
 
-	private Font NAME_FONT = new Font(Font.MONOSPACED, Font.BOLD, 11);
-	private Font VALUE_FONT = new Font(Font.MONOSPACED, Font.BOLD + Font.ITALIC, 11);
-	private Font ATTRIB_FONT = new Font(Font.MONOSPACED, Font.BOLD + Font.ITALIC, 11);
+	private Font NAME_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+	private Font VALUE_FONT = new Font(Font.MONOSPACED, Font.ITALIC, 12);
+	private Font ATTRIB_FONT = new Font(Font.MONOSPACED, Font.ITALIC, 12);
 
 	private Color NAME_COLOR_ACTIVE = new Color(0, 0, 0);
 	private Color NAME_COLOR = new Color(0, 0, 0);
@@ -43,14 +46,24 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 	private ConcurrentHashMap<String, Icon> iconCache = new ConcurrentHashMap<>();
 	private final int iconSizePx;
 
-	private FlowLayout layout = new FlowLayout(FlowLayout.LEADING, 5, 5);
+	private Border emptyLabel = new EmptyBorder(0, 5, 0, 5);
+	private Border emptyPanel = new EmptyBorder(3, 0, 0, 0);
+
+	private FlowLayout layout = new FlowLayout(FlowLayout.LEADING, 0, 0);
 
 	public ViewRenderer(int iconSizePx)
 	{
 		this.iconSizePx = Math.max(0, iconSizePx);
+
+		layout.setHgap(0);
+		layout.setVgap(0);
 		setLayout(layout);
+
 		setOpaque(false);
 
+		setBorder(emptyPanel);
+
+		setAlignmentY(JPanel.BOTTOM_ALIGNMENT);
 	}
 
 	@Override
@@ -89,18 +102,23 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 				String fn = getIconFilename(field);
 
 				JLabel lblName = new JLabel();
+				lblName.setFont(NAME_FONT);
+				lblName.setForeground(NAME_COLOR_ACTIVE);
+				lblName.setText(getDisplayName(field));
+				lblName.setBorder(emptyLabel);
+
 				JLabel lblValue = new JLabel();
+				lblValue.setForeground(VALUE_COLOR_ACTIVE);
+				lblValue.setFont(VALUE_FONT);
+				lblValue.setText(getDisplayValue(field));
+				lblValue.setBorder(emptyLabel);
+
 				JLabel lblAttribs = new JLabel();
+				lblAttribs.setFont(ATTRIB_FONT);
+				lblAttribs.setForeground(ATTRIB_COLOR_ACTIVE);
+				lblAttribs.setText(field.getAttributes());
+				lblAttribs.setBorder(emptyLabel);
 
-				boolean addName = false;
-				boolean addValue = false;
-				boolean addAttribs = false;
-
-				if (!getDisplayName(field).isEmpty())
-				{
-					lblName.setText(getDisplayName(field));
-					addName = true;
-				}
 
 				if (!getIconFilename(field).isEmpty())
 				{
@@ -109,41 +127,15 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 					{
 						lblName.setIcon((fn == null || fn.isBlank()) ? null : getIconFor(fn));
 					}
-					addName = true;
+
 				}
 
-				if (!getDisplayValue(field).isBlank())
-				{
-					lblValue = new JLabel(getDisplayValue(field));
-					addValue = true;
-				}
+				add(lblName);
 
-				if (!field.getAttributes().isEmpty())
-				{
-					lblAttribs = new JLabel(field.getAttributes());
-					addAttribs = true;
-				}
 
-				if (addName)
-				{
-					lblName.setFont(NAME_FONT);
-					lblName.setForeground(NAME_COLOR_ACTIVE);
-					add(lblName);
-				}
+				add(lblValue);
 
-				if (addValue)
-				{
-					lblValue.setForeground(VALUE_COLOR_ACTIVE);
-					lblValue.setFont(VALUE_FONT);
-					add(lblValue);
-				}
-
-				if (addAttribs)
-				{
-					lblAttribs.setFont(ATTRIB_FONT);
-					lblAttribs.setForeground(ATTRIB_COLOR_ACTIVE);
-					add(lblAttribs);
-				}
+				add(lblAttribs);
 
 			}
 		}
@@ -248,9 +240,9 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 	{
 		String result = field.getName();
 
-		if (ViewTree.elementNameTranslations.containsKey(result) && isTranslationRequired())
+		if (ViewTree.xmlTranslations.containsKey("element name:" + result) && isTranslationRequired())
 		{
-			result = ViewTree.elementNameTranslations.get(result);
+			result = ViewTree.xmlTranslations.get("element name:" + result);
 		}
 
 		return result;
@@ -261,9 +253,9 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 
 		String result = field.getValue().trim();
 
-		if (ViewTree.elementValueTranslations.containsKey(result) && isTranslationRequired())
+		if (ViewTree.xmlTranslations.containsKey("element value:" + result) && isTranslationRequired())
 		{
-			result = getOpenBracketsElement() + ViewTree.elementValueTranslations.get(result) + getCloseBracketsElement();
+			result = getOpenBracketsElement() + ViewTree.xmlTranslations.get("element value:" + result) + getCloseBracketsElement();
 		}
 		else
 		{
@@ -308,7 +300,7 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 		}
 		else
 		{
-			result=  "";
+			result = "";
 		}
 
 		return result;

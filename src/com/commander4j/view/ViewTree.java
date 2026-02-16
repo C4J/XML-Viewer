@@ -48,20 +48,13 @@ import com.commander4j.util.Utility;
 
 public final class ViewTree extends JFrame
 {
-	public static String version = "1.11";
+	public static String version = "1.20";
 
 	private static final long serialVersionUID = 1L;
 
-	public static ConcurrentHashMap<String, String> elementNameTranslations = new ConcurrentHashMap<String, String>();
-	public static ConcurrentHashMap<String, String> elementValueTranslations = new ConcurrentHashMap<String, String>();
+	public static ConcurrentHashMap<String, String> xmlTranslations = new ConcurrentHashMap<String, String>();
 
-	public static ConcurrentHashMap<String, String> attributeNameTranslations = new ConcurrentHashMap<String, String>();
-	public static ConcurrentHashMap<String, String> attributeValueTranslations = new ConcurrentHashMap<String, String>();
 
-	private String elementTranslations = "element_names.xml";
-	private String attributeTranslations = "attribute_names.xml";
-	private String elementValuesTranslations = "element_values.xml";
-	private String attributeValuesTranslations = "attribute_values.xml";
 	private String rootNodeName = "default";
 
 	private Utility util = new Utility();
@@ -108,7 +101,7 @@ public final class ViewTree extends JFrame
 	private ViewTranslations viewTranslations = new ViewTranslations();
 
 	private Dimension buttonSize = new Dimension(32, 32);
-	private Dimension blankSize = new Dimension(32, 32);
+	private Dimension blankSize = new Dimension(10, 32);
 	private Dimension labelSize = new Dimension(27, 27);
 
 	private int treeExpandLevel = 2;
@@ -124,8 +117,8 @@ public final class ViewTree extends JFrame
 	private JLabel4j_std lblTransMode_Status = new JLabel4j_std("");
 	private JLabel4j_std lblBracketMode_Status = new JLabel4j_std("");
 
-	private int iconSize = 25;
-	private int rowHeight = iconSize + 6;
+	private int iconSize = 24;
+	private int rowHeight = iconSize+1;
 
 	private final Logger logger = org.apache.logging.log4j.LogManager.getLogger(ViewTree.class);
 
@@ -187,7 +180,7 @@ public final class ViewTree extends JFrame
 		toolBarSide.setAlignmentX(SwingConstants.HORIZONTAL);
 		toolBarSide.setBackground(Common.color_app_window);
 		toolBarSide.setBorder(BorderFactory.createEmptyBorder());
-		contentPane.add(toolBarSide, BorderLayout.WEST);
+		contentPane.add(toolBarSide, BorderLayout.EAST);
 
 		toolBarBottom.setFloatable(false);
 		toolBarBottom.setOrientation(JToolBar.HORIZONTAL);
@@ -502,7 +495,7 @@ public final class ViewTree extends JFrame
 		tree.setBackground(Common.color_app_window);
 		tree.setShowsRootHandles(true);
 
-		tree.setRowHeight(30);
+		tree.setRowHeight(rowHeight);
 		tree.setCellRenderer(new ViewRenderer(iconSize));
 		tree.setFont(new Font("Terminal", Font.PLAIN, 14));
 
@@ -579,23 +572,12 @@ public final class ViewTree extends JFrame
 		lblLevel.setText(String.valueOf(level));
 	}
 
-	private String getTranslationPath(String filename)
-	{
-		String result = "";
-
-		result = "." + File.separator + "xml" + File.separator + "documents" + File.separator + "rootNode" + File.separator + getRootNodeName() + File.separator + "translations" + File.separator + filename;
-
-		return result;
-	}
-
 	private void loadTranslations(String language)
 	{
 
-		String transpath = "." + File.separator + "xml" + File.separator + "documents" + File.separator + "rootNode" + File.separator + getRootNodeName() + File.separator + "translations";
-		String iconpath = "." + File.separator + "xml" + File.separator + "documents" + File.separator + "rootNode" + File.separator + getRootNodeName() + File.separator + "icons";
+		String defaultpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + "default.xml";
 
-		String defaulttranspath = "." + File.separator + "xml" + File.separator + "documents" + File.separator + "rootNode" + File.separator + "default" + File.separator + "translations";
-		String defaulticonpath = "." + File.separator + "xml" + File.separator + "documents" + File.separator + "rootNode" + File.separator + "default" + File.separator + "icons";
+		String transpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + getRootNodeName() + ".xml";
 
 		File translationfolder = new File(transpath);
 
@@ -605,14 +587,8 @@ public final class ViewTree extends JFrame
 		{
 			try
 			{
-				logger.debug("mkdir=" + translationfolder);
-				FileUtils.forceMkdir(translationfolder);
 
-				File defaulttranslationfolder = new File(defaulttranspath);
-
-				logger.debug("defaulttranslationfolder=" + defaulttranslationfolder);
-
-				FileUtils.copyDirectory(defaulttranslationfolder, translationfolder);
+				FileUtils.copyFile(new File(defaultpath),new File(transpath));
 			}
 			catch (IOException e)
 			{
@@ -620,36 +596,8 @@ public final class ViewTree extends JFrame
 			}
 		}
 
-		File iconfolder = new File(iconpath);
-		logger.debug("iconfolder=" + iconfolder);
+		xmlTranslations = nonNullMap(viewTranslations.loadTranslations(transpath, language));
 
-		if (!iconfolder.exists())
-		{
-			try
-			{
-				logger.debug("mkdir=" + iconfolder);
-				FileUtils.forceMkdir(iconfolder);
-
-				File defaulticonfolder = new File(defaulticonpath);
-
-				logger.debug("defaulticonfolder=" + defaulticonfolder);
-
-				FileUtils.copyDirectory(defaulticonfolder, iconfolder);
-			}
-			catch (IOException e)
-			{
-
-			}
-
-		}
-
-		elementNameTranslations = nonNullMap(viewTranslations.loadTranslations(getTranslationPath(elementTranslations), language));
-
-		elementValueTranslations = nonNullMap(viewTranslations.loadTranslations(getTranslationPath(elementValuesTranslations), language));
-
-		attributeNameTranslations = nonNullMap(viewTranslations.loadTranslations(getTranslationPath(attributeTranslations), language));
-
-		attributeValueTranslations = nonNullMap(viewTranslations.loadTranslations(getTranslationPath(attributeValuesTranslations), language));
 
 	}
 
@@ -706,6 +654,8 @@ public final class ViewTree extends JFrame
 
 	public void openTree()
 	{
+
+		setExpansionLevel(treeExpandLevel);
 
 		loadXML = selectLoadTreeXML();
 

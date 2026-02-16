@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: com.commander4j.view.ViewTree
+Class-Path: lib/commons-io-2.18.0.jar 
+ lib/log4j-api-2.25.0.jar 
+ lib/log4j-core-2.25.0.jar 
