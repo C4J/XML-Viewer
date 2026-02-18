@@ -24,7 +24,6 @@ import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -53,7 +52,6 @@ public final class ViewTree extends JFrame
 	private static final long serialVersionUID = 1L;
 
 	public static ConcurrentHashMap<String, String> xmlTranslations = new ConcurrentHashMap<String, String>();
-
 
 	private Utility util = new Utility();
 
@@ -107,9 +105,8 @@ public final class ViewTree extends JFrame
 	private Dimension blankSize = new Dimension(10, 32);
 	private Dimension labelSize = new Dimension(27, 27);
 
-	private int treeExpandLevel = 2;
 
-	private JLabel4j_std lblLevel = new JLabel4j_std(String.valueOf(treeExpandLevel));
+	private JLabel4j_std lblLevel = new JLabel4j_std();
 	private JLabel4j_std lblViewMode = new JLabel4j_std("View Mode : ");
 	private JLabel4j_std lblIconMode = new JLabel4j_std("  Icon Mode : ");
 	private JLabel4j_std lblTransMode = new JLabel4j_std("  Translation Mode : ");
@@ -120,8 +117,6 @@ public final class ViewTree extends JFrame
 	private JLabel4j_std lblTransMode_Status = new JLabel4j_std("");
 	private JLabel4j_std lblBracketMode_Status = new JLabel4j_std("");
 
-	private String current_Translations = "default.xml";
-
 	private int iconSize = 24;
 	private int rowHeight = iconSize + 3;
 
@@ -130,7 +125,7 @@ public final class ViewTree extends JFrame
 	public static void main(String[] args)
 	{
 
-		//JOptionPane.showMessageDialog(null, args);
+		// JOptionPane.showMessageDialog(null, args);
 
 		String filename = "";
 
@@ -168,7 +163,18 @@ public final class ViewTree extends JFrame
 		util.setLookAndFeel("Nimbus");
 		util.initLogging("");
 
-		loadXML = getFileFromString(filename);
+		Common.viewConfig.load();
+
+		lblLevel.setText(String.valueOf(Common.viewConfig.getTreeExpansion()));
+
+		if (filename.equals(""))
+		{
+			loadXML = Common.viewConfig.getFile();
+		}
+		else
+		{
+			loadXML = getFileFromString(filename);
+		}
 
 		btnBlank1 = new JButton4j(Common.icon_blank);
 		btnBlank2 = new JButton4j(Common.icon_blank);
@@ -190,7 +196,7 @@ public final class ViewTree extends JFrame
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		loadTranslations("en");
+		loadTranslations();
 
 		sep.setAlignmentX(JSeparator.CENTER_ALIGNMENT);
 		sep.setOrientation(JSeparator.VERTICAL);
@@ -469,8 +475,8 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				setExpansionLevel(treeExpandLevel + 1);
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, treeExpandLevel);
+				int level = Common.viewConfig.increaseTreeExpansion(lblLevel);
+				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, level );
 			}
 		});
 		toolBarTop.add(btnLevelPlus);
@@ -484,7 +490,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				setExpansionLevel(0);
+				Common.viewConfig.setTreeExpansion(0,lblLevel);
 				TreeExpandUtil.collapseAll(tree);
 			}
 		});
@@ -509,8 +515,8 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				setExpansionLevel(treeExpandLevel - 1);
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, treeExpandLevel);
+				int level = Common.viewConfig.reduceTreeExpansion(lblLevel);
+				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, level );
 			}
 		});
 		toolBarTop.add(btnLevelMinus);
@@ -529,22 +535,27 @@ public final class ViewTree extends JFrame
 		toolBarTop.add(sep3);
 		lbl_Translations.setFont(Common.font_status_bar_label);
 		toolBarTop.add(lbl_Translations);
-		combobox_Translations.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		combobox_Translations.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 
-				current_Translations = (String) combobox_Translations.getSelectedItem();
-				loadTranslations("en");
+				Common.viewConfig.setTranslation((String) combobox_Translations.getSelectedItem());
+				Common.viewConfig.save();
+
+				loadTranslations();
+
 				tree.setCellRenderer(new ViewRenderer(iconSize));
 
 			}
 		});
 
 		combobox_Translations.setFont(Common.font_status_bar_label);
-		combobox_Translations.setPreferredSize(new Dimension(200,24));
-		combobox_Translations.setMinimumSize(new Dimension(200,24));
-		combobox_Translations.setMaximumSize(new Dimension(200,24));
-		combobox_Translations.setSize(new Dimension(200,24));
-		combobox_Translations.setModel(viewTranslations.populateFiles(current_Translations));
+		combobox_Translations.setPreferredSize(new Dimension(200, 24));
+		combobox_Translations.setMinimumSize(new Dimension(200, 24));
+		combobox_Translations.setMaximumSize(new Dimension(200, 24));
+		combobox_Translations.setSize(new Dimension(200, 24));
+		combobox_Translations.setModel(viewTranslations.populateFiles(Common.viewConfig.getTranslation()));
 
 		toolBarTop.add(combobox_Translations);
 
@@ -557,8 +568,11 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 
-				current_Translations = (String) combobox_Translations.getSelectedItem();
-				loadTranslations("en");
+				Common.viewConfig.setTranslation((String) combobox_Translations.getSelectedItem());
+				Common.viewConfig.save();
+
+				loadTranslations();
+
 				tree.setCellRenderer(new ViewRenderer(iconSize));
 
 			}
@@ -584,7 +598,7 @@ public final class ViewTree extends JFrame
 
 		TreeModeChange();
 
-		SwingUtilities.updateComponentTreeUI(tree);
+		//SwingUtilities.updateComponentTreeUI(tree);
 
 		setLocationRelativeTo(null);
 
@@ -637,21 +651,13 @@ public final class ViewTree extends JFrame
 		return count;
 	}
 
-	private void setExpansionLevel(int level)
-	{
-		if (level < 0)
-			level = 0;
-		treeExpandLevel = level;
-		lblLevel.setText(String.valueOf(level));
-	}
 
-	private void loadTranslations(String language)
+	private void loadTranslations()
 	{
 
-		String transpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + current_Translations;
+		String transpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + Common.viewConfig.getTranslation();
 
-
-		xmlTranslations = nonNullMap(viewTranslations.loadTranslations(transpath, language));
+		xmlTranslations = nonNullMap(viewTranslations.loadTranslations(transpath, Common.viewConfig.getLanguage()));
 
 	}
 
@@ -682,15 +688,13 @@ public final class ViewTree extends JFrame
 
 			treeModel = load.getTreeModel(xmlfile, mode);
 
-			loadTranslations("en");
+			loadTranslations();
 
 			tree.setModel(treeModel);
 
 			tree.setCellRenderer(new ViewRenderer(iconSize));
 
 			tree.setRowHeight(rowHeight);
-
-			TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, 2);
 
 		}
 		else
@@ -702,17 +706,21 @@ public final class ViewTree extends JFrame
 			tree.setCellRenderer(new ViewRenderer(iconSize));
 		}
 
+
+		TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion());
+
+
 	}
 
 	public void openTree()
 	{
 
-		setExpansionLevel(treeExpandLevel);
-
 		loadXML = selectLoadTreeXML();
 
 		if (loadXML != null)
 		{
+			Common.viewConfig.setFile(loadXML);
+			Common.viewConfig.save();
 			loadXML(loadXML);
 		}
 	}
@@ -733,10 +741,12 @@ public final class ViewTree extends JFrame
 	{
 		setTitle("");
 		loadXML = null;
+		Common.viewConfig.setFile(loadXML);
+		Common.viewConfig.save();
 		loadXML(loadXML);
+		combobox_Translations.setSelectedItem("default.xml");
 
 	}
-
 
 	private File selectLoadTreeXML()
 	{
@@ -745,7 +755,7 @@ public final class ViewTree extends JFrame
 		File result = null;
 
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setCurrentDirectory(Common.treeFolderFile);
+		fileChooser.setCurrentDirectory(Common.viewConfig.getFile());
 
 		JFileFilterXML ffi = new JFileFilterXML();
 		fileChooser.setApproveButtonText("Open");
@@ -758,7 +768,7 @@ public final class ViewTree extends JFrame
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
 			result = fileChooser.getSelectedFile();
-			Common.treeFolderFile = new File(result.getParent());
+			Common.viewConfig.setFile(result);
 		}
 		logger.debug("selectLoadTreeXML result=[" + result);
 

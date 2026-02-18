@@ -8,7 +8,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 
-import com.commander.renderer.JDBListRenderer;
+import com.commander4j.config.ViewConfig;
+
+import com.commander4j.renderer.JDBListRenderer;
 
 public class Common {
 
@@ -16,8 +18,10 @@ public class Common {
 
 	public static final JDBListRenderer renderer_list = new JDBListRenderer();
 
-	public static File treeFolderFile = null;
-	public static File treeFolderPath = null;
+	//public static File treeFolderFile = null;
+	//public static File treeFolderPath = null;
+
+	public static ViewConfig viewConfig = new ViewConfig();
 
 	public static String osName = "";
 
