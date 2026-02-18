@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ViewTranslations
@@ -55,62 +56,73 @@ public class ViewTranslations
 
 	}
 
+
 	public ConcurrentHashMap<String, String> loadTranslations(String xmlFilePath, String languageCode)
 	{
+	    ConcurrentHashMap<String, String> translations = new ConcurrentHashMap<>();
 
-		ConcurrentHashMap<String, String> translations = new ConcurrentHashMap<>();
+	    try
+	    {
+	        translations.clear();
 
-		try
-		{
-			// Create a DocumentBuilderFactory
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	        factory.setIgnoringComments(true);
+	        factory.setCoalescing(true);
 
-			// Load the XML file
-			Document document = builder.parse(new File(xmlFilePath));
-			document.getDocumentElement().normalize();
+	        DocumentBuilder builder = factory.newDocumentBuilder();
+	        Document document = builder.parse(new File(xmlFilePath));
+	        document.getDocumentElement().normalize();
 
-			// Locate the language element based on the provided code
-			NodeList languageNodes = document.getElementsByTagName("language");
-			for (int i = 0; i < languageNodes.getLength(); i++)
-			{
-				Element languageElement = (Element) languageNodes.item(i);
+	        NodeList languageNodes = document.getElementsByTagName("language");
 
-				// Check if the language code matches
-				if (languageElement.getAttribute("code").equals(languageCode))
-				{
+	        for (int i = 0; i < languageNodes.getLength(); i++)
+	        {
+	            Node langNode = languageNodes.item(i);
+	            if (langNode.getNodeType() != Node.ELEMENT_NODE) continue;
 
-					NodeList typeNodes = document.getElementsByTagName("type");
+	            Element languageElement = (Element) langNode;
 
-					for (int t = 0; t < typeNodes.getLength(); t++)
-					{
-						Element typeElement = (Element) typeNodes.item(t);
+	            if (languageCode.equals(languageElement.getAttribute("code")))
+	            {
+	                // IMPORTANT: scope searches to the selected language element
+	                NodeList typeNodes = languageElement.getElementsByTagName("type");
 
-						String type = typeElement.getAttribute("id");
+	                for (int t = 0; t < typeNodes.getLength(); t++)
+	                {
+	                    Node typeNode = typeNodes.item(t);
+	                    if (typeNode.getNodeType() != Node.ELEMENT_NODE) continue;
 
-						NodeList translationNodes = typeElement.getElementsByTagName("translation");
+	                    Element typeElement = (Element) typeNode;
+	                    String type = typeElement.getAttribute("id");
 
+	                    NodeList translationNodes = typeElement.getElementsByTagName("translation");
 
-						for (int j = 0; j < translationNodes.getLength(); j++)
-						{
-							Element translationElement = (Element) translationNodes.item(j);
-							String from = translationElement.getAttribute("from");
-							String to = translationElement.getAttribute("to");
+	                    for (int j = 0; j < translationNodes.getLength(); j++)
+	                    {
+	                        Node trNode = translationNodes.item(j);
+	                        if (trNode.getNodeType() != Node.ELEMENT_NODE) continue;
 
-							translations.put(type+":"+from, to);
+	                        Element translationElement = (Element) trNode;
+	                        String from = translationElement.getAttribute("from");
+	                        String to = translationElement.getAttribute("to");
 
-						}
+	                        // Optional: skip empty keys
+	                        if (from != null && !from.isBlank())
+	                        {
+	                            translations.put(type + ":" + from, to);
+	                        }
+	                    }
+	                }
+	                break; // Exit once the correct language is found
+	            }
+	        }
+	    }
+	    catch (Exception e)
+	    {
+	        logger.debug(e.getMessage());
+	    }
 
-					}
-					break; // Exit once the correct language is found
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			logger.debug(e.getMessage()); // Handle exceptions appropriately
-		}
-
-		return translations;
+	    return translations;
 	}
+
 }

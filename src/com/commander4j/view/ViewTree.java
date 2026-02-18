@@ -87,7 +87,9 @@ public final class ViewTree extends JFrame
 	private JButton4j btnLevelPlus;
 
 	JLabel4j_std lbl_Translations = new JLabel4j_std("Translation File : ");
+	JLabel4j_std lbl_Languages = new JLabel4j_std("Language : ");
 	JComboBox4j<String> combobox_Translations = new JComboBox4j<String>();
+	JComboBox4j<String> combobox_Languages = new JComboBox4j<String>();
 
 	private DefaultTreeModel treeModel;
 
@@ -533,6 +535,7 @@ public final class ViewTree extends JFrame
 		toolBarTop.add(lblLevel);
 
 		toolBarTop.add(sep3);
+
 		lbl_Translations.setFont(Common.font_status_bar_label);
 		toolBarTop.add(lbl_Translations);
 		combobox_Translations.addActionListener(new ActionListener()
@@ -577,6 +580,32 @@ public final class ViewTree extends JFrame
 
 			}
 		});
+
+		lbl_Languages.setFont(Common.font_status_bar_label);
+		toolBarTop.add(lbl_Languages);
+		combobox_Languages.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+
+				Common.viewConfig.setLanguage((String) combobox_Languages.getSelectedItem());
+				Common.viewConfig.save();
+
+				loadTranslations();
+
+				tree.setCellRenderer(new ViewRenderer(iconSize));
+
+			}
+		});
+
+		combobox_Languages.setFont(Common.font_status_bar_label);
+		combobox_Languages.setPreferredSize(new Dimension(50, 24));
+		combobox_Languages.setMinimumSize(new Dimension(50, 24));
+		combobox_Languages.setMaximumSize(new Dimension(50, 24));
+		combobox_Languages.setSize(new Dimension(50, 24));
+		combobox_Languages.setModel(Common.viewConfig.getLanguageOptions());
+
+		toolBarTop.add(combobox_Languages);
 
 		tree = new JTree(new DefaultMutableTreeNode("No document"));
 		tree.setBackground(Common.color_app_window);

@@ -1,7 +1,9 @@
 package com.commander4j.config;
 
 import java.io.File;
+import java.util.LinkedList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,6 +27,7 @@ public class ViewConfig
 	private String translation = "default.xml";
 	private int treeExpansion = 2;
 	private String language = "en";
+	private LinkedList<String> availableLanguages = new LinkedList<String>();
 
 	public File getFile()
 	{
@@ -33,7 +36,7 @@ public class ViewConfig
 
 	public String getFileAsString()
 	{
-		if (file==null)
+		if (file == null)
 		{
 			return "";
 		}
@@ -50,7 +53,8 @@ public class ViewConfig
 
 	public String getLanguage()
 	{
-		if (language.equals("")) language="en";
+		if (language.equals(""))
+			language = "en";
 		return language;
 	}
 
@@ -58,7 +62,7 @@ public class ViewConfig
 	{
 		if (translation.equals(""))
 		{
-			translation="default.xml";
+			translation = "default.xml";
 		}
 		return translation;
 	}
@@ -100,17 +104,41 @@ public class ViewConfig
 			value = dom.directText(element);
 			setTranslation(value);
 
-			nodes= doc.getElementsByTagName("treeExpansion");
+			nodes = doc.getElementsByTagName("treeExpansion");
 			element = (Element) nodes.item(0);
-			value= dom.directText(element);
-			if (value.equals("")) value = "2";
+			value = dom.directText(element);
+			if (value.equals(""))
+				value = "2";
 			setTreeExpansion(Integer.valueOf(value));
 
-			nodes= doc.getElementsByTagName("language");
+			nodes = doc.getElementsByTagName("language");
 			element = (Element) nodes.item(0);
-			value = dom.directText(element );
+			value = dom.directText(element);
+			if (value.equals(""))
+				value = "en";
 			setLanguage(value);
 
+			availableLanguages.clear();
+
+			NodeList optionsList = doc.getDocumentElement().getElementsByTagName("languages");
+
+			if (optionsList.getLength() > 0)
+			{
+				Element options = (Element) optionsList.item(0);
+
+				NodeList languageNodes = options.getElementsByTagName("language");
+
+				for (int i = 0; i < languageNodes.getLength(); i++)
+				{
+					String v = languageNodes.item(i).getTextContent();
+					if (v != null)
+					{
+						v = v.trim();
+						if (!v.isEmpty())
+							availableLanguages.add(v);
+					}
+				}
+			}
 		}
 		catch (Exception ex)
 		{
@@ -146,9 +174,10 @@ public class ViewConfig
 			Element translation = doc.createElement("translation");
 			Element treeExpansion = doc.createElement("treeExpansion");
 			Element language = doc.createElement("language");
+			Element options = doc.createElement("options");
+			Element languages = doc.createElement("languages");
 
 			doc.appendChild(config);
-
 
 			inputPath.setTextContent(getFileAsString());
 			translation.setTextContent(getTranslation());
@@ -160,7 +189,17 @@ public class ViewConfig
 			defaults.appendChild(treeExpansion);
 			defaults.appendChild(language);
 
+			for (int x = 0; x < availableLanguages.size(); x++)
+			{
+				Element language2 = doc.createElement("language");
+				language2.setTextContent(availableLanguages.get(x));
+				languages.appendChild(language2);
+			}
+
+			options.appendChild(languages);
+
 			config.appendChild(defaults);
+			config.appendChild(options);
 
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -220,5 +259,16 @@ public class ViewConfig
 	private void updateLabel(JLabel label)
 	{
 		label.setText(String.valueOf(treeExpansion));
+	}
+
+	public DefaultComboBoxModel<String> getLanguageOptions()
+	{
+		DefaultComboBoxModel<String> DefComboBoxMod = new DefaultComboBoxModel<String>();
+
+		DefComboBoxMod.addAll(availableLanguages);
+
+		DefComboBoxMod.setSelectedItem(language);
+
+		return DefComboBoxMod;
 	}
 }
