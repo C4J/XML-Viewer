@@ -24,6 +24,7 @@ import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -47,7 +48,8 @@ import com.commander4j.util.Utility;
 
 public final class ViewTree extends JFrame
 {
-	public static String version = "1.21";
+	public static String title1 = "XML Viewer - Version ";
+	public static String version = "1.31";
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,8 +58,6 @@ public final class ViewTree extends JFrame
 	private Utility util = new Utility();
 
 	private JPanel contentPane;
-
-	private JTree tree;
 
 	private JToolBar toolBarTop = new JToolBar();
 	private JToolBar toolBarSide = new JToolBar();
@@ -91,8 +91,6 @@ public final class ViewTree extends JFrame
 	JComboBox4j<String> combobox_Translations = new JComboBox4j<String>();
 	JComboBox4j<String> combobox_Languages = new JComboBox4j<String>();
 
-	private DefaultTreeModel treeModel;
-
 	private JScrollPane scrollPane;
 
 	private File loadXML;
@@ -106,7 +104,6 @@ public final class ViewTree extends JFrame
 	private Dimension buttonSize = new Dimension(32, 32);
 	private Dimension blankSize = new Dimension(10, 32);
 	private Dimension labelSize = new Dimension(27, 27);
-
 
 	private JLabel4j_std lblLevel = new JLabel4j_std();
 	private JLabel4j_std lblViewMode = new JLabel4j_std("View Mode : ");
@@ -122,12 +119,21 @@ public final class ViewTree extends JFrame
 	private int iconSize = 24;
 	private int rowHeight = iconSize + 3;
 
+	private JTree tree;
+	private DefaultTreeModel treeModel;
+	private ViewRenderer treeRenderer = new ViewRenderer(iconSize);
+
 	private final Logger logger = org.apache.logging.log4j.LogManager.getLogger(ViewTree.class);
+
+	public enum TreeAction
+	{
+		ExpandToLevel, ExpandLevelMinus, CollapseAll, CollapseSelectedPath, ExpandAll, ExpandSelectedPath, ExpandLevelPlus
+	}
+
+	boolean initialising = true;
 
 	public static void main(String[] args)
 	{
-
-		// JOptionPane.showMessageDialog(null, args);
 
 		String filename = "";
 
@@ -162,6 +168,7 @@ public final class ViewTree extends JFrame
 
 	public ViewTree(String filename)
 	{
+		initialising = true;
 		util.setLookAndFeel("Nimbus");
 		util.initLogging("");
 
@@ -298,7 +305,6 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				TreeModeChange();
-				tree.setCellRenderer(new ViewRenderer(iconSize));
 			}
 		});
 		toolBarSide.add(viewIcons);
@@ -312,7 +318,6 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				TreeModeChange();
-				tree.setCellRenderer(new ViewRenderer(iconSize));
 			}
 		});
 		toolBarSide.add(viewTrans);
@@ -326,7 +331,6 @@ public final class ViewTree extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				TreeModeChange();
-				tree.setCellRenderer(new ViewRenderer(iconSize));
 			}
 		});
 		toolBarSide.add(viewBrackets);
@@ -451,7 +455,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				TreeExpandUtil.expandAll(tree);
+				expandTree(TreeAction.ExpandAll);
 			}
 		});
 		toolBarTop.add(btnExpandAll);
@@ -463,8 +467,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
-				TreeExpandUtil.expandSelectedPath(tree);
+				expandTree(TreeAction.ExpandSelectedPath);
 			}
 		});
 		toolBarTop.add(btnExpand);
@@ -477,8 +480,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				int level = Common.viewConfig.increaseTreeExpansion(lblLevel);
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, level );
+				expandTree(TreeAction.ExpandLevelPlus);
 			}
 		});
 		toolBarTop.add(btnLevelPlus);
@@ -492,8 +494,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Common.viewConfig.setTreeExpansion(0,lblLevel);
-				TreeExpandUtil.collapseAll(tree);
+				expandTree(TreeAction.CollapseAll);
 			}
 		});
 		toolBarTop.add(btnCollapseAll);
@@ -505,7 +506,8 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				TreeExpandUtil.collapseSelectedPath(tree);
+				expandTree(TreeAction.CollapseSelectedPath);
+
 			}
 		});
 		toolBarTop.add(btnCollapse);
@@ -517,8 +519,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				int level = Common.viewConfig.reduceTreeExpansion(lblLevel);
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, level );
+				expandTree(TreeAction.ExpandLevelMinus);
 			}
 		});
 		toolBarTop.add(btnLevelMinus);
@@ -547,8 +548,7 @@ public final class ViewTree extends JFrame
 				Common.viewConfig.save();
 
 				loadTranslations();
-
-				tree.setCellRenderer(new ViewRenderer(iconSize));
+				TreeModeChange();
 
 			}
 		});
@@ -575,8 +575,7 @@ public final class ViewTree extends JFrame
 				Common.viewConfig.save();
 
 				loadTranslations();
-
-				tree.setCellRenderer(new ViewRenderer(iconSize));
+				TreeModeChange();
 
 			}
 		});
@@ -592,8 +591,7 @@ public final class ViewTree extends JFrame
 				Common.viewConfig.save();
 
 				loadTranslations();
-
-				tree.setCellRenderer(new ViewRenderer(iconSize));
+				TreeModeChange();
 
 			}
 		});
@@ -612,7 +610,7 @@ public final class ViewTree extends JFrame
 		tree.setShowsRootHandles(true);
 
 		tree.setRowHeight(rowHeight);
-		tree.setCellRenderer(new ViewRenderer(iconSize));
+		tree.setCellRenderer(treeRenderer);
 		tree.setFont(new Font("Terminal", Font.PLAIN, 14));
 
 		scrollPane = new JScrollPane(tree);
@@ -623,11 +621,10 @@ public final class ViewTree extends JFrame
 
 		pack();
 
+		initialising = false;
+
 		loadXML(loadXML);
-
 		TreeModeChange();
-
-		//SwingUtilities.updateComponentTreeUI(tree);
 
 		setLocationRelativeTo(null);
 
@@ -680,7 +677,6 @@ public final class ViewTree extends JFrame
 		return count;
 	}
 
-
 	private void loadTranslations()
 	{
 
@@ -695,12 +691,30 @@ public final class ViewTree extends JFrame
 		return (m != null) ? m : new ConcurrentHashMap<>();
 	}
 
+	private void setFrameTitle(File file)
+	{
+		String filename = "";
+
+		String title = "";
+
+		if (file != null)
+		{
+			filename = "    [" + file.getAbsolutePath() + "]";
+		}
+
+		title = title1 + version + "  " + filename;
+
+		setTitle(title);
+
+	}
+
 	private void loadXML(File xmlfile)
 	{
 
+		setFrameTitle(xmlfile);
+
 		if (xmlfile != null)
 		{
-			setTitle(xmlfile.getAbsolutePath());
 
 			int mode = Load.Mode_Standard;
 
@@ -721,8 +735,6 @@ public final class ViewTree extends JFrame
 
 			tree.setModel(treeModel);
 
-			tree.setCellRenderer(new ViewRenderer(iconSize));
-
 			tree.setRowHeight(rowHeight);
 
 		}
@@ -731,14 +743,63 @@ public final class ViewTree extends JFrame
 			Load load = new Load();
 			treeModel = load.getEmptyTreeModel();
 			tree.setModel(treeModel);
-
-			tree.setCellRenderer(new ViewRenderer(iconSize));
 		}
 
+		expandTree(TreeAction.ExpandToLevel);
 
-		TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion());
+	}
 
+	private void expandTree(TreeAction level)
+	{
 
+		if (initialising == false)
+		{
+			if (level == TreeAction.ExpandToLevel)
+			{
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion());
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+			}
+
+			if (level == TreeAction.ExpandLevelMinus)
+			{
+				int expandlevel = Common.viewConfig.reduceTreeExpansion(lblLevel);
+				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, expandlevel);
+			}
+
+			if (level == TreeAction.CollapseAll)
+			{
+				Common.viewConfig.setTreeExpansion(0, lblLevel);
+				TreeExpandUtil.collapseAll(tree);
+			}
+
+			if (level == TreeAction.CollapseSelectedPath)
+			{
+				TreeExpandUtil.collapseSelectedPath(tree);
+			}
+
+			if (level == TreeAction.ExpandAll)
+			{
+				TreeExpandUtil.expandAll(tree);
+			}
+
+			if (level == TreeAction.ExpandSelectedPath)
+			{
+				TreeExpandUtil.expandSelectedPath(tree);
+			}
+
+			if (level == TreeAction.ExpandLevelPlus)
+			{
+				int expandLevel = Common.viewConfig.increaseTreeExpansion(lblLevel);
+				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, expandLevel);
+			}
+		}
 	}
 
 	public void openTree()
@@ -799,6 +860,7 @@ public final class ViewTree extends JFrame
 			result = fileChooser.getSelectedFile();
 			Common.viewConfig.setFile(result);
 		}
+
 		logger.debug("selectLoadTreeXML result=[" + result);
 
 		return result;
@@ -852,6 +914,17 @@ public final class ViewTree extends JFrame
 			lblBracketMode_Status.setText("OFF");
 		}
 
+		treeModel.reload();
+
+		Thread expand = new Thread()
+		{
+			public void run()
+			{
+				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion());
+			}
+		};
+
+		SwingUtilities.invokeLater(expand);
 	}
 
 }
