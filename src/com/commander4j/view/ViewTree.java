@@ -36,6 +36,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.commander4j.dialog.JDialogAbout;
 import com.commander4j.dialog.JDialogLicenses;
+import com.commander4j.enu.TreeAction;
 import com.commander4j.gui.JButton4j;
 import com.commander4j.gui.JComboBox4j;
 import com.commander4j.gui.JLabel4j_std;
@@ -49,7 +50,7 @@ import com.commander4j.util.Utility;
 public final class ViewTree extends JFrame
 {
 	public static String title1 = "XML Viewer - Version ";
-	public static String version = "1.31";
+	public static String version = "1.32";
 
 	private static final long serialVersionUID = 1L;
 
@@ -124,11 +125,6 @@ public final class ViewTree extends JFrame
 	private ViewRenderer treeRenderer = new ViewRenderer(iconSize);
 
 	private final Logger logger = org.apache.logging.log4j.LogManager.getLogger(ViewTree.class);
-
-	public enum TreeAction
-	{
-		ExpandToLevel, ExpandLevelMinus, CollapseAll, CollapseSelectedPath, ExpandAll, ExpandSelectedPath, ExpandLevelPlus
-	}
 
 	boolean initialising = true;
 
@@ -283,7 +279,7 @@ public final class ViewTree extends JFrame
 		});
 
 		viewMode = new JToggleButton4j();
-		viewMode.setSelected(true);
+		viewMode.setSelected(Common.viewConfig.isViewMode());
 		viewMode.setToolTipText("View Mode");
 		viewMode.setPreferredSize(buttonSize);
 		viewMode.addActionListener(new ActionListener()
@@ -297,7 +293,7 @@ public final class ViewTree extends JFrame
 		toolBarSide.add(viewMode);
 
 		viewIcons = new JToggleButton4j();
-		viewIcons.setSelected(true);
+		viewIcons.setSelected(Common.viewConfig.isViewIcons());
 		viewIcons.setToolTipText("View Icons");
 		viewIcons.setPreferredSize(buttonSize);
 		viewIcons.addActionListener(new ActionListener()
@@ -310,7 +306,7 @@ public final class ViewTree extends JFrame
 		toolBarSide.add(viewIcons);
 
 		viewTrans = new JToggleButton4j();
-		viewTrans.setSelected(true);
+		viewTrans.setSelected(Common.viewConfig.isViewTrans());
 		viewTrans.setToolTipText("View Translations");
 		viewTrans.setPreferredSize(buttonSize);
 		viewTrans.addActionListener(new ActionListener()
@@ -323,7 +319,7 @@ public final class ViewTree extends JFrame
 		toolBarSide.add(viewTrans);
 
 		viewBrackets = new JToggleButton4j();
-		viewBrackets.setSelected(true);
+		viewBrackets.setSelected(Common.viewConfig.isViewBrackets());
 		viewBrackets.setToolTipText("View Brackets");
 		viewBrackets.setPreferredSize(buttonSize);
 		viewBrackets.addActionListener(new ActionListener()
@@ -623,8 +619,11 @@ public final class ViewTree extends JFrame
 
 		initialising = false;
 
+
+		Common.viewConfig.setFile(loadXML);
 		loadXML(loadXML);
-		TreeModeChange();
+		buttonState();
+
 
 		setLocationRelativeTo(null);
 
@@ -657,6 +656,7 @@ public final class ViewTree extends JFrame
 		int question = JOptionPane.showConfirmDialog(ViewTree.this, "Exit application ?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, Common.app_icon);
 		if (question == 0)
 		{
+			Common.viewConfig.save();
 			System.exit(0);
 		}
 	}
@@ -720,11 +720,12 @@ public final class ViewTree extends JFrame
 
 			if (viewMode.isSelected())
 			{
-				mode = Load.Mode_Standard;
+				mode = Load.Mode_Flat;
+
 			}
 			else
 			{
-				mode = Load.Mode_Flat;
+				mode = Load.Mode_Standard;
 			}
 
 			Load load = new Load();
@@ -769,35 +770,87 @@ public final class ViewTree extends JFrame
 
 			if (level == TreeAction.ExpandLevelMinus)
 			{
-				int expandlevel = Common.viewConfig.reduceTreeExpansion(lblLevel);
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, expandlevel);
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.reduceTreeExpansion(lblLevel));
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+
 			}
 
 			if (level == TreeAction.CollapseAll)
 			{
-				Common.viewConfig.setTreeExpansion(0, lblLevel);
-				TreeExpandUtil.collapseAll(tree);
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						Common.viewConfig.setTreeExpansion(0, lblLevel);
+						TreeExpandUtil.collapseAll(tree);
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+
 			}
 
 			if (level == TreeAction.CollapseSelectedPath)
 			{
-				TreeExpandUtil.collapseSelectedPath(tree);
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						TreeExpandUtil.collapseSelectedPath(tree);
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+
 			}
 
 			if (level == TreeAction.ExpandAll)
 			{
-				TreeExpandUtil.expandAll(tree);
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						TreeExpandUtil.expandAll(tree);
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+
 			}
 
 			if (level == TreeAction.ExpandSelectedPath)
 			{
-				TreeExpandUtil.expandSelectedPath(tree);
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						TreeExpandUtil.expandSelectedPath(tree);
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+
 			}
 
 			if (level == TreeAction.ExpandLevelPlus)
 			{
-				int expandLevel = Common.viewConfig.increaseTreeExpansion(lblLevel);
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, expandLevel);
+				Thread expand = new Thread()
+				{
+					public void run()
+					{
+						TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.increaseTreeExpansion(lblLevel));
+					}
+				};
+
+				SwingUtilities.invokeLater(expand);
+
 			}
 		}
 	}
@@ -866,19 +919,27 @@ public final class ViewTree extends JFrame
 		return result;
 	}
 
-	private void TreeModeChange()
+	private void buttonState()
 	{
+		Common.viewConfig.setViewMode(viewMode.isSelected());
+		Common.viewConfig.setViewTrans(viewTrans.isSelected());
+		Common.viewConfig.setViewIcons(viewIcons.isSelected());
+		Common.viewConfig.setViewBrackets(viewBrackets.isSelected());
 
 		if (viewMode.isSelected())
 		{
-			viewMode.setIcon(Common.icon_mode1);
+
+			viewMode.setIcon(Common.icon_mode2);
 			lblViewMode_Status.setText("Standard ");
 		}
 		else
+
 		{
-			viewMode.setIcon(Common.icon_mode2);
 			viewMode.setIcon(Common.icon_mode1);
 			lblViewMode_Status.setText("Flatten  ");
+
+
+
 		}
 
 		if (viewIcons.isSelected())
@@ -913,18 +974,18 @@ public final class ViewTree extends JFrame
 			viewBrackets.setIcon(Common.app_brackets_off);
 			lblBracketMode_Status.setText("OFF");
 		}
+	}
+
+
+	private void TreeModeChange()
+	{
+
+		buttonState();
 
 		treeModel.reload();
 
-		Thread expand = new Thread()
-		{
-			public void run()
-			{
-				TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion());
-			}
-		};
+		expandTree(TreeAction.ExpandToLevel);
 
-		SwingUtilities.invokeLater(expand);
 	}
 
 }

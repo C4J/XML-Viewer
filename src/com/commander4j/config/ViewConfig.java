@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.commander4j.sys.Common;
 import com.commander4j.xml.DomText;
 
 public class ViewConfig
@@ -28,6 +29,50 @@ public class ViewConfig
 	private int treeExpansion = 2;
 	private String language = "en";
 	private LinkedList<String> availableLanguages = new LinkedList<String>();
+    private boolean viewMode = true;
+    private boolean viewIcons = true;
+    private boolean viewTrans = true;
+    private boolean viewBrackets = true;
+
+	public boolean isViewMode()
+	{
+		return viewMode;
+	}
+
+	public void setViewMode(boolean viewMode)
+	{
+		this.viewMode = viewMode;
+	}
+
+	public boolean isViewIcons()
+	{
+		return viewIcons;
+	}
+
+	public void setViewIcons(boolean viewIcons)
+	{
+		this.viewIcons = viewIcons;
+	}
+
+	public boolean isViewTrans()
+	{
+		return viewTrans;
+	}
+
+	public void setViewTrans(boolean viewTrans)
+	{
+		this.viewTrans = viewTrans;
+	}
+
+	public boolean isViewBrackets()
+	{
+		return viewBrackets;
+	}
+
+	public void setViewBrackets(boolean viewBrackets)
+	{
+		this.viewBrackets = viewBrackets;
+	}
 
 	public File getFile()
 	{
@@ -118,6 +163,34 @@ public class ViewConfig
 				value = "en";
 			setLanguage(value);
 
+			nodes = doc.getElementsByTagName("viewMode");
+			element = (Element) nodes.item(0);
+			value = dom.directText(element);
+			if (value.equals(""))
+				value = "false";
+			setViewMode(Boolean.valueOf(value));
+
+			nodes = doc.getElementsByTagName("viewIcons");
+			element = (Element) nodes.item(0);
+			value = dom.directText(element);
+			if (value.equals(""))
+				value = "false";
+			setViewIcons(Boolean.valueOf(value));
+
+			nodes = doc.getElementsByTagName("viewTrans");
+			element = (Element) nodes.item(0);
+			value = dom.directText(element);
+			if (value.equals(""))
+				value = "false";
+			setViewTrans(Boolean.valueOf(value));
+
+			nodes = doc.getElementsByTagName("viewBrackets");
+			element = (Element) nodes.item(0);
+			value = dom.directText(element);
+			if (value.equals(""))
+				value = "false";
+			setViewBrackets(Boolean.valueOf(value));
+
 			availableLanguages.clear();
 
 			NodeList optionsList = doc.getDocumentElement().getElementsByTagName("languages");
@@ -176,6 +249,10 @@ public class ViewConfig
 			Element language = doc.createElement("language");
 			Element options = doc.createElement("options");
 			Element languages = doc.createElement("languages");
+			Element viewMode = doc.createElement("viewMode");
+			Element viewTrans = doc.createElement("viewTrans");
+			Element viewBrackets = doc.createElement("viewBrackets");
+			Element viewIcons = doc.createElement("viewIcons");
 
 			doc.appendChild(config);
 
@@ -183,11 +260,19 @@ public class ViewConfig
 			translation.setTextContent(getTranslation());
 			treeExpansion.setTextContent(String.valueOf(getTreeExpansion()));
 			language.setTextContent(getLanguage());
+			viewMode.setTextContent(String.valueOf(Common.viewConfig.isViewMode()));
+			viewTrans.setTextContent(String.valueOf(Common.viewConfig.isViewTrans()));
+			viewBrackets.setTextContent(String.valueOf(Common.viewConfig.isViewBrackets()));
+			viewIcons.setTextContent(String.valueOf(Common.viewConfig.isViewIcons()));
 
 			defaults.appendChild(inputPath);
 			defaults.appendChild(translation);
 			defaults.appendChild(treeExpansion);
 			defaults.appendChild(language);
+			defaults.appendChild(viewMode);
+			defaults.appendChild(viewTrans);
+			defaults.appendChild(viewBrackets);
+			defaults.appendChild(viewIcons);
 
 			for (int x = 0; x < availableLanguages.size(); x++)
 			{
