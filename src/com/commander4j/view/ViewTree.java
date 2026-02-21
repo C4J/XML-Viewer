@@ -30,13 +30,15 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.commander4j.dialog.JDialogAbout;
 import com.commander4j.dialog.JDialogLicenses;
-import com.commander4j.enu.TreeAction;
+import com.commander4j.enu.TreeDisplayAction;
+import com.commander4j.enu.TreeExpandAction;
 import com.commander4j.gui.JButton4j;
 import com.commander4j.gui.JComboBox4j;
 import com.commander4j.gui.JLabel4j_std;
@@ -50,7 +52,7 @@ import com.commander4j.util.Utility;
 public final class ViewTree extends JFrame
 {
 	public static String title1 = "XML Viewer - Version ";
-	public static String version = "1.32";
+	public static String version = "1.33";
 
 	private static final long serialVersionUID = 1L;
 
@@ -286,8 +288,8 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				TreeModeChange();
 				loadXML(loadXML);
+				TreeModeChange(TreeDisplayAction.Reload);
 			}
 		});
 		toolBarSide.add(viewMode);
@@ -300,7 +302,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				TreeModeChange();
+				TreeModeChange(TreeDisplayAction.Refresh);
 			}
 		});
 		toolBarSide.add(viewIcons);
@@ -313,7 +315,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				TreeModeChange();
+				TreeModeChange(TreeDisplayAction.Refresh);
 			}
 		});
 		toolBarSide.add(viewTrans);
@@ -326,7 +328,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				TreeModeChange();
+				TreeModeChange(TreeDisplayAction.Refresh);
 			}
 		});
 		toolBarSide.add(viewBrackets);
@@ -451,7 +453,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				expandTree(TreeAction.ExpandAll);
+				expandTree(TreeExpandAction.ExpandAll);
 			}
 		});
 		toolBarTop.add(btnExpandAll);
@@ -463,7 +465,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				expandTree(TreeAction.ExpandSelectedPath);
+				expandTree(TreeExpandAction.ExpandSelectedPath);
 			}
 		});
 		toolBarTop.add(btnExpand);
@@ -476,7 +478,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				expandTree(TreeAction.ExpandLevelPlus);
+				expandTree(TreeExpandAction.ExpandLevelPlus);
 			}
 		});
 		toolBarTop.add(btnLevelPlus);
@@ -490,7 +492,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				expandTree(TreeAction.CollapseAll);
+				expandTree(TreeExpandAction.CollapseAll);
 			}
 		});
 		toolBarTop.add(btnCollapseAll);
@@ -502,7 +504,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				expandTree(TreeAction.CollapseSelectedPath);
+				expandTree(TreeExpandAction.CollapseSelectedPath);
 
 			}
 		});
@@ -515,7 +517,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				expandTree(TreeAction.ExpandLevelMinus);
+				expandTree(TreeExpandAction.ExpandLevelMinus);
 			}
 		});
 		toolBarTop.add(btnLevelMinus);
@@ -544,7 +546,7 @@ public final class ViewTree extends JFrame
 				Common.viewConfig.save();
 
 				loadTranslations();
-				TreeModeChange();
+				TreeModeChange(TreeDisplayAction.Reload);
 
 			}
 		});
@@ -571,7 +573,7 @@ public final class ViewTree extends JFrame
 				Common.viewConfig.save();
 
 				loadTranslations();
-				TreeModeChange();
+				TreeModeChange(TreeDisplayAction.Reload);
 
 			}
 		});
@@ -587,7 +589,7 @@ public final class ViewTree extends JFrame
 				Common.viewConfig.save();
 
 				loadTranslations();
-				TreeModeChange();
+				TreeModeChange(TreeDisplayAction.Reload);
 
 			}
 		});
@@ -619,11 +621,9 @@ public final class ViewTree extends JFrame
 
 		initialising = false;
 
-
 		Common.viewConfig.setFile(loadXML);
 		loadXML(loadXML);
 		buttonState();
-
 
 		setLocationRelativeTo(null);
 
@@ -746,16 +746,16 @@ public final class ViewTree extends JFrame
 			tree.setModel(treeModel);
 		}
 
-		expandTree(TreeAction.ExpandToLevel);
+		expandTree(TreeExpandAction.ExpandToLevel);
 
 	}
 
-	private void expandTree(TreeAction level)
+	private void expandTree(TreeExpandAction level)
 	{
 
 		if (initialising == false)
 		{
-			if (level == TreeAction.ExpandToLevel)
+			if (level == TreeExpandAction.ExpandToLevel)
 			{
 				Thread expand = new Thread()
 				{
@@ -768,7 +768,7 @@ public final class ViewTree extends JFrame
 				SwingUtilities.invokeLater(expand);
 			}
 
-			if (level == TreeAction.ExpandLevelMinus)
+			if (level == TreeExpandAction.ExpandLevelMinus)
 			{
 				Thread expand = new Thread()
 				{
@@ -782,7 +782,7 @@ public final class ViewTree extends JFrame
 
 			}
 
-			if (level == TreeAction.CollapseAll)
+			if (level == TreeExpandAction.CollapseAll)
 			{
 				Thread expand = new Thread()
 				{
@@ -797,7 +797,7 @@ public final class ViewTree extends JFrame
 
 			}
 
-			if (level == TreeAction.CollapseSelectedPath)
+			if (level == TreeExpandAction.CollapseSelectedPath)
 			{
 				Thread expand = new Thread()
 				{
@@ -811,7 +811,7 @@ public final class ViewTree extends JFrame
 
 			}
 
-			if (level == TreeAction.ExpandAll)
+			if (level == TreeExpandAction.ExpandAll)
 			{
 				Thread expand = new Thread()
 				{
@@ -825,7 +825,7 @@ public final class ViewTree extends JFrame
 
 			}
 
-			if (level == TreeAction.ExpandSelectedPath)
+			if (level == TreeExpandAction.ExpandSelectedPath)
 			{
 				Thread expand = new Thread()
 				{
@@ -839,7 +839,7 @@ public final class ViewTree extends JFrame
 
 			}
 
-			if (level == TreeAction.ExpandLevelPlus)
+			if (level == TreeExpandAction.ExpandLevelPlus)
 			{
 				Thread expand = new Thread()
 				{
@@ -938,8 +938,6 @@ public final class ViewTree extends JFrame
 			viewMode.setIcon(Common.icon_mode1);
 			lblViewMode_Status.setText("Flatten  ");
 
-
-
 		}
 
 		if (viewIcons.isSelected())
@@ -976,16 +974,66 @@ public final class ViewTree extends JFrame
 		}
 	}
 
-
-	private void TreeModeChange()
+	private void TreeModeChange(TreeDisplayAction action)
 	{
 
 		buttonState();
 
-		treeModel.reload();
+		if (action == TreeDisplayAction.Refresh)
+		{
 
-		expandTree(TreeAction.ExpandToLevel);
+			refreshAllKeepState(tree);
+		}
+
+		if (action == TreeDisplayAction.Reload)
+		{
+			treeModel.reload();
+
+			expandTree(TreeExpandAction.ExpandToLevel);
+		}
 
 	}
+	public static void refreshAllKeepState(JTree tree) {
+	    if (!SwingUtilities.isEventDispatchThread()) {
+	        SwingUtilities.invokeLater(() -> refreshAllKeepState(tree));
+	        return;
+	    }
 
+	    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+	    Object root = model.getRoot();
+	    if (root == null) return;
+
+	    TreePath[] selection = tree.getSelectionPaths();
+	    java.util.List<TreePath> expanded = getExpandedPaths(tree);
+
+	    JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, tree);
+	    java.awt.Point viewPos = (sp != null) ? sp.getViewport().getViewPosition() : null;
+
+	    // Single, global invalidate (much cheaper than N nodeChanged events)
+	    model.nodeStructureChanged((javax.swing.tree.TreeNode) root);
+
+	    // Helps force preferred size + scrollbars to update
+	    tree.treeDidChange();
+	    tree.revalidate();
+	    tree.repaint();
+
+	    // Restore
+	    restoreExpandedPaths(tree, expanded);
+	    if (selection != null) tree.setSelectionPaths(selection);
+	    if (sp != null && viewPos != null) sp.getViewport().setViewPosition(viewPos);
+	}
+
+	private static java.util.List<TreePath> getExpandedPaths(JTree tree) {
+	    java.util.List<TreePath> list = new java.util.ArrayList<>();
+	    Object root = tree.getModel().getRoot();
+	    if (root == null) return list;
+
+	    java.util.Enumeration<TreePath> en = tree.getExpandedDescendants(new TreePath(root));
+	    if (en != null) while (en.hasMoreElements()) list.add(en.nextElement());
+	    return list;
+	}
+
+	private static void restoreExpandedPaths(JTree tree, java.util.List<TreePath> expanded) {
+	    for (TreePath p : expanded) tree.expandPath(p);
+	}
 }
