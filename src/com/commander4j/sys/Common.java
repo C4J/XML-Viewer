@@ -86,7 +86,7 @@ public class Common {
 
 	public static String appIconPath = "."+File.separator+"images"+File.separator+"appIcons"+File.separator;
 	public static String xmlIconPath = "."+File.separator+"images"+File.separator+"xmlIcons"+File.separator;
-
+	public static String stdIconPath = "."+File.separator+"images"+File.separator+"icons"+File.separator+"XMLViewer"+File.separator+"MyIcon.iconset"+File.separator;
 
 
 
@@ -99,49 +99,45 @@ public class Common {
 	public final static ImageIcon app_icon = new ImageIcon(appIconPath+"icon_32x32.png");
 	public final static ImageIcon icon_mode1 = new ImageIcon(appIconPath+"mode1_24x24.png");
 	public final static ImageIcon icon_mode2 = new ImageIcon(appIconPath+"mode2_24x24.png");
-	public final static ImageIcon tray_icon_mac = new ImageIcon(appIconPath+"TrayIcon_Mac.png");
-	public final static ImageIcon tray_icon_windows = new ImageIcon(appIconPath+"TrayIcon_Windows.png");
-	public final static ImageIcon tray_icon_linux = new ImageIcon(appIconPath+"TrayIcon_Linux.png");
-	public final static ImageIcon icon_left_arrow = new ImageIcon(appIconPath+"left_arrow_24x24.png");
 	public final static ImageIcon icon_menuStructure = new ImageIcon(appIconPath+"folder_tree.png");
-	public final static ImageIcon icon_select_folder = new ImageIcon(appIconPath+"/select_folder_24x24.png");
-	public final static ImageIcon icon_select_file = new ImageIcon(appIconPath+"/select_file_24x24.png");
-	public final static ImageIcon icon_add = new ImageIcon(appIconPath+"/add_24x24.png");
-	public final static ImageIcon icon_open = new ImageIcon(appIconPath+"/open_file_24x24.png");
-	public final static ImageIcon icon_new = new ImageIcon(appIconPath+"/new_file_24x24.png");
-	public final static ImageIcon icon_save = new ImageIcon(appIconPath+"/save_24x24.png");
-	public final static ImageIcon icon_password = new ImageIcon(appIconPath+"/password_24x24.png");
-	public final static ImageIcon icon_erase = new ImageIcon(appIconPath+"/eraser_24x24.png");
-	public final static ImageIcon icon_font = new ImageIcon(appIconPath+"/font_24x24.png");
-	public final static ImageIcon icon_duplicate = new ImageIcon(appIconPath+"/duplicate_24x24.png");
-	public final static ImageIcon icon_release = new ImageIcon(appIconPath+"/release_24x24.png");
-	public final static ImageIcon icon_hold = new ImageIcon(appIconPath+"/hold_24x24.png");
-	public final static ImageIcon icon_button_key = new ImageIcon(appIconPath+"/button_key_24x24.png");
-	public final static ImageIcon icon_about = new ImageIcon(appIconPath+"/about_24x24.png");
-	public final static ImageIcon icon_help = new ImageIcon(appIconPath+"/help_24x24.png");
-	public final static ImageIcon icon_exit = new ImageIcon(appIconPath+"/exit_24x24.png");
-	public final static ImageIcon icon_ok = new ImageIcon(appIconPath+"/ok_24x24.png");
-	public final static ImageIcon icon_cancel = new ImageIcon(appIconPath+"/cancel_24x24.png");
-	public final static ImageIcon icon_delete = new ImageIcon(appIconPath+"/delete_24x24.png");
-	public final static ImageIcon icon_edit = new ImageIcon(appIconPath+"/edit_24x24.png");
-	public final static ImageIcon icon_file_new = new ImageIcon(appIconPath+"/exit_24x24.gif");
-	public final static ImageIcon icon_file_open = new ImageIcon(appIconPath+"/open_file_24x24.png");
-	public final static ImageIcon icon_expandAll = new ImageIcon(appIconPath+"/expandall_24x24.png");
-	public final static ImageIcon icon_blank = new ImageIcon(appIconPath+"/blank_24x24.png");
-	public final static ImageIcon icon_expandNode = new ImageIcon(appIconPath+"/expandnode_24x24.png");
-	public final static ImageIcon icon_expandPlus = new ImageIcon(appIconPath+"/expandplus_24x24.png");
-	public final static ImageIcon icon_expandMinus = new ImageIcon(appIconPath+"/expandminus_24x24.png");
-	public final static ImageIcon icon_collapseAll = new ImageIcon(appIconPath+"/collapseall_24x24.png");
-	public final static ImageIcon icon_collapeNode = new ImageIcon(appIconPath+"/collapsenode_24x24.png");
-	public final static ImageIcon icon_execute = new ImageIcon(appIconPath+"/execute_24x24.png");
-	public final static ImageIcon icon_settings = new ImageIcon(appIconPath+"/settings_24x24.png");
-	public final static ImageIcon icon_reload = new ImageIcon(appIconPath+"/refresh_24x24.png");
-	public final static ImageIcon icon_function = new ImageIcon(appIconPath+"/function.gif");
-	public final static ImageIcon icon_info = new ImageIcon(appIconPath+"/info.gif");
-	public final static ImageIcon icon_branchOpen = new ImageIcon(appIconPath+"/folder_open.png");
-	public final static ImageIcon icon_branchClose = new ImageIcon(appIconPath+"/folder_closed.png");
-	public final static ImageIcon icon_confirm = new ImageIcon(appIconPath+"/Icon_Menu4j.png");
-	public final static ImageIcon icon_license = new ImageIcon(appIconPath+"/open_source_24x24.png");
+	public final static ImageIcon icon_select_folder = new ImageIcon(appIconPath+"select_folder_24x24.png");
+	public final static ImageIcon icon_select_file = new ImageIcon(appIconPath+"select_file_24x24.png");
+	public final static ImageIcon icon_add = new ImageIcon(appIconPath+"add_24x24.png");
+	public final static ImageIcon icon_open = new ImageIcon(appIconPath+"open_file_24x24.png");
+	public final static ImageIcon icon_new = new ImageIcon(appIconPath+"new_file_24x24.png");
+	public final static ImageIcon icon_save = new ImageIcon(appIconPath+"save_24x24.png");
+	public final static ImageIcon icon_password = new ImageIcon(appIconPath+"password_24x24.png");
+	public final static ImageIcon icon_erase = new ImageIcon(appIconPath+"eraser_24x24.png");
+	public final static ImageIcon icon_font = new ImageIcon(appIconPath+"font_24x24.png");
+	public final static ImageIcon icon_duplicate = new ImageIcon(appIconPath+"duplicate_24x24.png");
+	public final static ImageIcon icon_release = new ImageIcon(appIconPath+"release_24x24.png");
+	public final static ImageIcon icon_hold = new ImageIcon(appIconPath+"hold_24x24.png");
+	public final static ImageIcon icon_button_key = new ImageIcon(appIconPath+"button_key_24x24.png");
+	public final static ImageIcon icon_about = new ImageIcon(appIconPath+"about_24x24.png");
+	public final static ImageIcon icon_help = new ImageIcon(appIconPath+"help_24x24.png");
+	public final static ImageIcon icon_exit = new ImageIcon(appIconPath+"exit_24x24.png");
+	public final static ImageIcon icon_ok = new ImageIcon(appIconPath+"ok_24x24.png");
+	public final static ImageIcon icon_cancel = new ImageIcon(appIconPath+"cancel_24x24.png");
+	public final static ImageIcon icon_delete = new ImageIcon(appIconPath+"delete_24x24.png");
+	public final static ImageIcon icon_edit = new ImageIcon(appIconPath+"edit_24x24.png");
+	public final static ImageIcon icon_file_new = new ImageIcon(appIconPath+"exit_24x24.gif");
+	public final static ImageIcon icon_file_open = new ImageIcon(appIconPath+"open_file_24x24.png");
+	public final static ImageIcon icon_expandAll = new ImageIcon(appIconPath+"expandall_24x24.png");
+	public final static ImageIcon icon_blank = new ImageIcon(appIconPath+"blank_24x24.png");
+	public final static ImageIcon icon_expandNode = new ImageIcon(appIconPath+"expandnode_24x24.png");
+	public final static ImageIcon icon_expandPlus = new ImageIcon(appIconPath+"expandplus_24x24.png");
+	public final static ImageIcon icon_expandMinus = new ImageIcon(appIconPath+"expandminus_24x24.png");
+	public final static ImageIcon icon_collapseAll = new ImageIcon(appIconPath+"collapseall_24x24.png");
+	public final static ImageIcon icon_collapeNode = new ImageIcon(appIconPath+"collapsenode_24x24.png");
+	public final static ImageIcon icon_execute = new ImageIcon(appIconPath+"execute_24x24.png");
+	public final static ImageIcon icon_settings = new ImageIcon(appIconPath+"settings_24x24.png");
+	public final static ImageIcon icon_reload = new ImageIcon(appIconPath+"refresh_24x24.png");
+	public final static ImageIcon icon_function = new ImageIcon(appIconPath+"function.gif");
+	public final static ImageIcon icon_info = new ImageIcon(appIconPath+"info.gif");
+	public final static ImageIcon icon_branchOpen = new ImageIcon(appIconPath+"folder_open.png");
+	public final static ImageIcon icon_branchClose = new ImageIcon(appIconPath+"folder_closed.png");
+	public final static ImageIcon icon_application = new ImageIcon(stdIconPath+"icon_32x32.png");
+	public final static ImageIcon icon_license = new ImageIcon(appIconPath+"open_source_24x24.png");
 
 }
 

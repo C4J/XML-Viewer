@@ -99,7 +99,7 @@ public class JDialogAbout extends JDialog
 							}
 						} catch (Exception ex)
 						{
-							JOptionPane.showMessageDialog(JDialogAbout.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, Common.icon_confirm);
+							JOptionPane.showMessageDialog(JDialogAbout.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE, Common.icon_application);
 						}
 
 				}

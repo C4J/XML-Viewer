@@ -10,6 +10,8 @@ import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.nio.file.LinkOption;
 import java.util.concurrent.ConcurrentHashMap;
@@ -169,6 +171,8 @@ public final class ViewTree extends JFrame
 		initialising = true;
 		util.setLookAndFeel("Nimbus");
 		util.initLogging("");
+
+		addWindowListener(new WindowListener());
 
 		Common.viewConfig.load();
 
@@ -653,7 +657,7 @@ public final class ViewTree extends JFrame
 	{
 		bringToFront();
 
-		int question = JOptionPane.showConfirmDialog(ViewTree.this, "Exit application ?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, Common.app_icon);
+		int question = JOptionPane.showConfirmDialog(ViewTree.this, "Exit application ?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, Common.icon_application);
 		if (question == 0)
 		{
 			Common.viewConfig.save();
@@ -1035,5 +1039,13 @@ public final class ViewTree extends JFrame
 
 	private static void restoreExpandedPaths(JTree tree, java.util.List<TreePath> expanded) {
 	    for (TreePath p : expanded) tree.expandPath(p);
+	}
+
+	class WindowListener extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent e)
+		{
+			confirmExit();
+		}
 	}
 }
