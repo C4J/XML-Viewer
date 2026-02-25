@@ -18,9 +18,6 @@ public class Common {
 
 	public static final JDBListRenderer renderer_list = new JDBListRenderer();
 
-	//public static File treeFolderFile = null;
-	//public static File treeFolderPath = null;
-
 	public static ViewConfig viewConfig = new ViewConfig();
 
 	public static String osName = "";
@@ -83,13 +80,15 @@ public class Common {
 	public final static Color color_button_font_hover = Color.black;
 	public final static Color color_textfield_foreground_disabled = Color.BLUE;
 	public final static Color color_textfield_background_disabled = new Color(241, 241, 241);
+	public final static Color color_dark_green = new Color(33,185,68);
 
 	public static String appIconPath = "."+File.separator+"images"+File.separator+"appIcons"+File.separator;
 	public static String xmlIconPath = "."+File.separator+"images"+File.separator+"xmlIcons"+File.separator;
 	public static String stdIconPath = "."+File.separator+"images"+File.separator+"icons"+File.separator+"XMLViewer"+File.separator+"MyIcon.iconset"+File.separator;
 
 
-
+	public final static ImageIcon app_icon_up = new ImageIcon(appIconPath+"up_24x24.png");
+	public final static ImageIcon app_icon_down = new ImageIcon(appIconPath+"down_24x24.png");
 	public final static ImageIcon app_icon_on = new ImageIcon(appIconPath+"icons_on_24x24.png");
 	public final static ImageIcon app_icon_off = new ImageIcon(appIconPath+"icons_off_24x24.png");
 	public final static ImageIcon app_brackets_on = new ImageIcon(appIconPath+"brackets_on_24x24.png");

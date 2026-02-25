@@ -14,7 +14,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.nio.file.LinkOption;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -39,12 +38,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.commander4j.dialog.JDialogAbout;
 import com.commander4j.dialog.JDialogLicenses;
+import com.commander4j.dialog.JDialogTranslations;
 import com.commander4j.enu.TreeDisplayAction;
 import com.commander4j.enu.TreeExpandAction;
 import com.commander4j.gui.JButton4j;
 import com.commander4j.gui.JComboBox4j;
 import com.commander4j.gui.JLabel4j_std;
 import com.commander4j.gui.JToggleButton4j;
+import com.commander4j.renderer.ViewRenderer;
 import com.commander4j.sys.Common;
 import com.commander4j.util.JFileFilterXML;
 import com.commander4j.util.JHelp;
@@ -54,11 +55,9 @@ import com.commander4j.util.Utility;
 public final class ViewTree extends JFrame
 {
 	public static String title1 = "XML Viewer - Version ";
-	public static String version = "1.33";
+	public static String version = "1.50";
 
 	private static final long serialVersionUID = 1L;
-
-	public static ConcurrentHashMap<String, String> xmlTranslations = new ConcurrentHashMap<String, String>();
 
 	private Utility util = new Utility();
 
@@ -79,6 +78,7 @@ public final class ViewTree extends JFrame
 	private JButton4j btnRefreshTranslation;
 	private JButton4j btnClear;
 	private JButton4j btnSettings;
+	private JButton4j btnEdit;
 	private JButton4j btnHelp;
 	private JButton4j btnAbout;
 	private JButton4j btnOpen;
@@ -106,7 +106,7 @@ public final class ViewTree extends JFrame
 
 	private ViewTranslations viewTranslations = new ViewTranslations();
 
-	private Dimension buttonSize = new Dimension(32, 32);
+	public static Dimension buttonSize = new Dimension(32, 32);
 	private Dimension blankSize = new Dimension(10, 32);
 	private Dimension labelSize = new Dimension(27, 27);
 
@@ -115,6 +115,8 @@ public final class ViewTree extends JFrame
 	private JLabel4j_std lblIconMode = new JLabel4j_std("  Icon Mode : ");
 	private JLabel4j_std lblTransMode = new JLabel4j_std("  Translation Mode : ");
 	private JLabel4j_std lblBracketMode = new JLabel4j_std("  Bracket Mode : ");
+	private JLabel4j_std lblStatusTitle = new JLabel4j_std("  Status : ");
+	private JPanel lblStatusState = new JPanel();
 
 	private JLabel4j_std lblViewMode_Status = new JLabel4j_std("");
 	private JLabel4j_std lblIconMode_Status = new JLabel4j_std("");
@@ -122,6 +124,7 @@ public final class ViewTree extends JFrame
 	private JLabel4j_std lblBracketMode_Status = new JLabel4j_std("");
 
 	private int iconSize = 24;
+	private Dimension statusDimension = new Dimension(15, 15);
 	private int rowHeight = iconSize + 3;
 
 	private JTree tree;
@@ -134,17 +137,11 @@ public final class ViewTree extends JFrame
 
 	public static void main(String[] args)
 	{
-
-		String filename = "";
-
-		if (args.length > 0)
-		{
-			filename = args[0];
-		}
-
-		ViewTree f = new ViewTree(filename);
-
-		f.setVisible(true);
+		final String filename = (args.length > 0) ? args[0] : "";
+		javax.swing.SwingUtilities.invokeLater(() -> {
+			ViewTree f = new ViewTree(filename);
+			f.setVisible(true);
+		});
 	}
 
 	private File getFileFromString(String filename)
@@ -194,6 +191,7 @@ public final class ViewTree extends JFrame
 		btnRefreshTranslation = new JButton4j(Common.icon_reload);
 		btnClear = new JButton4j(Common.icon_erase);
 		btnSettings = new JButton4j(Common.icon_settings);
+		btnEdit = new JButton4j(Common.icon_edit);
 		btnHelp = new JButton4j(Common.icon_help);
 		btnAbout = new JButton4j(Common.icon_about);
 		btnLicense = new JButton4j(Common.icon_license);
@@ -345,7 +343,7 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// settings();
+
 			}
 		});
 
@@ -450,6 +448,36 @@ public final class ViewTree extends JFrame
 		toolBarBottom.add(lblBracketMode);
 		toolBarBottom.add(lblBracketMode_Status);
 
+		lblStatusTitle.setAlignmentX(JLabel4j_std.RIGHT_ALIGNMENT);
+		lblStatusTitle.setFont(Common.font_status_bar_label);
+		lblBracketMode_Status.setAlignmentX(JLabel4j_std.LEFT_ALIGNMENT);
+		lblBracketMode_Status.setFont(Common.font_status_bar_status);
+		toolBarBottom.add(lblStatusTitle);
+		toolBarBottom.add(lblStatusState);
+
+		lblStatusState.setOpaque(true);
+		lblStatusState.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+		lblStatusState.setSize(statusDimension);
+		lblStatusState.setPreferredSize(statusDimension);
+		lblStatusState.setMaximumSize(statusDimension);
+		lblStatusState.setMinimumSize(statusDimension);
+
+		TreeExpandUtil.setBusyListener((tree, busy) -> {
+			if (busy == true)
+			{
+				lblStatusState.setBackground(Color.red);
+			}
+			else
+			{
+				lblStatusState.setBackground(Common.color_dark_green);
+			}
+
+			if (tree != null)
+			{
+				tree.setCursor(java.awt.Cursor.getPredefinedCursor(busy ? java.awt.Cursor.WAIT_CURSOR : java.awt.Cursor.DEFAULT_CURSOR));
+			}
+		});
+
 		btnExpandAll.setToolTipText("Expand all branches");
 		btnExpandAll.setPreferredSize(buttonSize);
 		btnExpandAll.setFocusable(false);
@@ -545,13 +573,11 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
 				Common.viewConfig.setTranslation((String) combobox_Translations.getSelectedItem());
 				Common.viewConfig.save();
 
 				loadTranslations();
 				TreeModeChange(TreeDisplayAction.Reload);
-
 			}
 		});
 
@@ -563,8 +589,19 @@ public final class ViewTree extends JFrame
 		combobox_Translations.setModel(viewTranslations.populateFiles(Common.viewConfig.getTranslation()));
 
 		toolBarTop.add(combobox_Translations);
+		toolBarTop.add(btnEdit);
+		btnEdit.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JDialogTranslations settingTranslation = new JDialogTranslations(ViewTree.this,(String) combobox_Translations.getSelectedItem());
+				settingTranslation.setVisible(true);
+				TreeModeChange(TreeDisplayAction.Refresh);
+			}
+		});
 
-		btnRefreshTranslation.setToolTipText("Refresh Translations");
+
+		btnRefreshTranslation.setToolTipText("Reload Translations");
 		toolBarTop.add(btnRefreshTranslation);
 		btnRefreshTranslation.setPreferredSize(buttonSize);
 		btnRefreshTranslation.setFocusable(false);
@@ -572,13 +609,11 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
 				Common.viewConfig.setTranslation((String) combobox_Translations.getSelectedItem());
 				Common.viewConfig.save();
 
 				loadTranslations();
 				TreeModeChange(TreeDisplayAction.Reload);
-
 			}
 		});
 
@@ -588,13 +623,11 @@ public final class ViewTree extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
 				Common.viewConfig.setLanguage((String) combobox_Languages.getSelectedItem());
 				Common.viewConfig.save();
 
 				loadTranslations();
 				TreeModeChange(TreeDisplayAction.Reload);
-
 			}
 		});
 
@@ -686,13 +719,8 @@ public final class ViewTree extends JFrame
 
 		String transpath = "." + File.separator + "xml" + File.separator + "translations" + File.separator + Common.viewConfig.getTranslation();
 
-		xmlTranslations = nonNullMap(viewTranslations.loadTranslations(transpath, Common.viewConfig.getLanguage()));
+		Common.viewConfig.translations.loadTranslationMatrix(transpath);
 
-	}
-
-	private static ConcurrentHashMap<String, String> nonNullMap(ConcurrentHashMap<String, String> m)
-	{
-		return (m != null) ? m : new ConcurrentHashMap<>();
 	}
 
 	private void setFrameTitle(File file)
@@ -720,19 +748,19 @@ public final class ViewTree extends JFrame
 		if (xmlfile != null)
 		{
 
-			int mode = Load.Mode_Standard;
+			int mode = ViewLoad.Mode_Standard;
 
 			if (viewMode.isSelected())
 			{
-				mode = Load.Mode_Flat;
+				mode = ViewLoad.Mode_Flat;
 
 			}
 			else
 			{
-				mode = Load.Mode_Standard;
+				mode = ViewLoad.Mode_Standard;
 			}
 
-			Load load = new Load();
+			ViewLoad load = new ViewLoad();
 
 			treeModel = load.getTreeModel(xmlfile, mode);
 
@@ -745,7 +773,7 @@ public final class ViewTree extends JFrame
 		}
 		else
 		{
-			Load load = new Load();
+			ViewLoad load = new ViewLoad();
 			treeModel = load.getEmptyTreeModel();
 			tree.setModel(treeModel);
 		}
@@ -761,100 +789,41 @@ public final class ViewTree extends JFrame
 		{
 			if (level == TreeExpandAction.ExpandToLevel)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion());
-					}
-				};
-
-				SwingUtilities.invokeLater(expand);
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion()));
 			}
 
 			if (level == TreeExpandAction.ExpandLevelMinus)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.reduceTreeExpansion(lblLevel));
-					}
-				};
+				Common.viewConfig.reduceTreeExpansion(lblLevel);
 
-				SwingUtilities.invokeLater(expand);
-
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion()));
 			}
 
 			if (level == TreeExpandAction.CollapseAll)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						Common.viewConfig.setTreeExpansion(0, lblLevel);
-						TreeExpandUtil.collapseAll(tree);
-					}
-				};
-
-				SwingUtilities.invokeLater(expand);
-
+				Common.viewConfig.setTreeExpansion(0, lblLevel);
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.collapseAll(tree));
 			}
 
 			if (level == TreeExpandAction.CollapseSelectedPath)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						TreeExpandUtil.collapseSelectedPath(tree);
-					}
-				};
-
-				SwingUtilities.invokeLater(expand);
-
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.collapseSelectedPath(tree));
 			}
 
 			if (level == TreeExpandAction.ExpandAll)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						TreeExpandUtil.expandAll(tree);
-					}
-				};
-
-				SwingUtilities.invokeLater(expand);
-
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.expandAll(tree));
 			}
 
 			if (level == TreeExpandAction.ExpandSelectedPath)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						TreeExpandUtil.expandSelectedPath(tree);
-					}
-				};
-
-				SwingUtilities.invokeLater(expand);
-
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.expandSelectedPath(tree));
 			}
 
 			if (level == TreeExpandAction.ExpandLevelPlus)
 			{
-				Thread expand = new Thread()
-				{
-					public void run()
-					{
-						TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.increaseTreeExpansion(lblLevel));
-					}
-				};
-
-				SwingUtilities.invokeLater(expand);
-
+				Common.viewConfig.increaseTreeExpansion(lblLevel);
+				SwingUtilities.invokeLater(() -> TreeExpandUtil.expandToLevelAndCollapseDeeper(tree, Common.viewConfig.getTreeExpansion()));
 			}
 		}
 	}
@@ -934,13 +903,13 @@ public final class ViewTree extends JFrame
 		{
 
 			viewMode.setIcon(Common.icon_mode2);
-			lblViewMode_Status.setText("Standard ");
+			lblViewMode_Status.setText("Flatten  ");
 		}
 		else
 
 		{
 			viewMode.setIcon(Common.icon_mode1);
-			lblViewMode_Status.setText("Flatten  ");
+			lblViewMode_Status.setText("Standard ");
 
 		}
 
@@ -997,48 +966,60 @@ public final class ViewTree extends JFrame
 		}
 
 	}
-	public static void refreshAllKeepState(JTree tree) {
-	    if (!SwingUtilities.isEventDispatchThread()) {
-	        SwingUtilities.invokeLater(() -> refreshAllKeepState(tree));
-	        return;
-	    }
 
-	    DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-	    Object root = model.getRoot();
-	    if (root == null) return;
+	public static void refreshAllKeepState(JTree tree)
+	{
+		if (!SwingUtilities.isEventDispatchThread())
+		{
+			SwingUtilities.invokeLater(() -> refreshAllKeepState(tree));
+			return;
+		}
 
-	    TreePath[] selection = tree.getSelectionPaths();
-	    java.util.List<TreePath> expanded = getExpandedPaths(tree);
+		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+		Object root = model.getRoot();
+		if (root == null)
+			return;
 
-	    JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, tree);
-	    java.awt.Point viewPos = (sp != null) ? sp.getViewport().getViewPosition() : null;
+		TreePath[] selection = tree.getSelectionPaths();
+		java.util.List<TreePath> expanded = getExpandedPaths(tree);
 
-	    // Single, global invalidate (much cheaper than N nodeChanged events)
-	    model.nodeStructureChanged((javax.swing.tree.TreeNode) root);
+		JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, tree);
+		java.awt.Point viewPos = (sp != null) ? sp.getViewport().getViewPosition() : null;
 
-	    // Helps force preferred size + scrollbars to update
-	    tree.treeDidChange();
-	    tree.revalidate();
-	    tree.repaint();
+		// Single, global invalidate (much cheaper than N nodeChanged events)
+		model.nodeStructureChanged((javax.swing.tree.TreeNode) root);
 
-	    // Restore
-	    restoreExpandedPaths(tree, expanded);
-	    if (selection != null) tree.setSelectionPaths(selection);
-	    if (sp != null && viewPos != null) sp.getViewport().setViewPosition(viewPos);
+		// Helps force preferred size + scrollbars to update
+		tree.treeDidChange();
+		tree.revalidate();
+		tree.repaint();
+
+		// Restore
+		restoreExpandedPaths(tree, expanded);
+		if (selection != null)
+			tree.setSelectionPaths(selection);
+		if (sp != null && viewPos != null)
+			sp.getViewport().setViewPosition(viewPos);
 	}
 
-	private static java.util.List<TreePath> getExpandedPaths(JTree tree) {
-	    java.util.List<TreePath> list = new java.util.ArrayList<>();
-	    Object root = tree.getModel().getRoot();
-	    if (root == null) return list;
+	private static java.util.List<TreePath> getExpandedPaths(JTree tree)
+	{
+		java.util.List<TreePath> list = new java.util.ArrayList<>();
+		Object root = tree.getModel().getRoot();
+		if (root == null)
+			return list;
 
-	    java.util.Enumeration<TreePath> en = tree.getExpandedDescendants(new TreePath(root));
-	    if (en != null) while (en.hasMoreElements()) list.add(en.nextElement());
-	    return list;
+		java.util.Enumeration<TreePath> en = tree.getExpandedDescendants(new TreePath(root));
+		if (en != null)
+			while (en.hasMoreElements())
+				list.add(en.nextElement());
+		return list;
 	}
 
-	private static void restoreExpandedPaths(JTree tree, java.util.List<TreePath> expanded) {
-	    for (TreePath p : expanded) tree.expandPath(p);
+	private static void restoreExpandedPaths(JTree tree, java.util.List<TreePath> expanded)
+	{
+		for (TreePath p : expanded)
+			tree.expandPath(p);
 	}
 
 	class WindowListener extends WindowAdapter

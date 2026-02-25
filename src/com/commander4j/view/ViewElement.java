@@ -10,7 +10,7 @@ import org.w3c.dom.NodeList;
 
 import com.commander4j.util.Utility;
 
-public class ViewField
+public class ViewElement
 {
 	private String elementName = "";
 	private String elementFilename = "";
@@ -19,7 +19,7 @@ public class ViewField
 	private Utility util = new Utility();
 	private TreeMap<String, ViewAttribute> attribs = new TreeMap<String, ViewAttribute>();
 
-	public ViewField(Element element)
+	public ViewElement(Element element)
 	{
 		setElementName(element.getNodeName());
 
@@ -84,6 +84,11 @@ public class ViewField
 		}
 		return result;
 
+	}
+
+	public TreeMap<String, ViewAttribute> getAttributes()
+	{
+		return attribs;
 	}
 
 	public String getElementFilename()

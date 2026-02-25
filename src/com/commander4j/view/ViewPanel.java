@@ -4,16 +4,16 @@ import java.util.LinkedList;
 
 public class ViewPanel
 {
-	private final LinkedList<ViewField> fields = new LinkedList<>();
+	private final LinkedList<ViewElement> fields = new LinkedList<>();
 
-	public ViewPanel addField(ViewField field)
+	public ViewPanel addField(ViewElement field)
 	{
 		if (field != null)
 			fields.add(field);
 		return this;
 	}
 
-	public LinkedList<ViewField> getFields()
+	public LinkedList<ViewElement> getFields()
 	{
 		return fields;
 	}

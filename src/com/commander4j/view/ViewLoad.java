@@ -1,6 +1,8 @@
 package com.commander4j.view;
 
 import java.io.File;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -12,14 +14,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Load
+import com.commander4j.sys.Common;
+
+public class ViewLoad
 {
 	public static int Mode_Standard = 1;
 	public static int Mode_Flat = 2;
 
 	public boolean showElementTextBrackets = true;
 	public boolean showAttributeValueBrackets = true;
-	private  String rootElementName = "default";
+	private String rootElementName = "default";
 
 	public String getRootElementName()
 	{
@@ -50,8 +54,11 @@ public class Load
 	}
 
 	public DefaultMutableTreeNode read(File inputFile, int mode)
-
 	{
+
+		Common.viewConfig.translations.xmlMatrix.clear();
+
+
 		DefaultMutableTreeNode treeNode = null;
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
@@ -71,7 +78,6 @@ public class Load
 				Element rootElement = document.getDocumentElement();
 
 				setRootElementName(rootElement.getNodeName());
-
 
 				if (mode == Mode_Standard)
 				{
@@ -118,13 +124,36 @@ public class Load
 		return result;
 	}
 
+	private void storeViewFieldData(ViewElement vf)
+	{
+
+		Common.viewConfig.translations.addMissingTranslation(Common.viewConfig.getLanguage(), "element name", vf.getElementName());
+		Common.viewConfig.translations.addMissingTranslation(Common.viewConfig.getLanguage(), "element value", vf.getElementValue());
+
+		TreeMap<String, ViewAttribute> attribs = vf.getAttributes();
+
+		for (Map.Entry<String, ViewAttribute> set : attribs.entrySet())
+		{
+			String name = set.getValue().getAttributeName();
+			String value = set.getValue().getAttributeValue();
+
+			if (name.equals("") == false)
+			{
+				Common.viewConfig.translations.addMissingTranslation(Common.viewConfig.getLanguage(), "attribute name", name);
+				Common.viewConfig.translations.addMissingTranslation(Common.viewConfig.getLanguage(), "attribute value", value);
+			}
+		}
+	}
+
 	public DefaultMutableTreeNode recurse_Standard(int level, DefaultMutableTreeNode treeNode, Element element)
 	{
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode();
 
 		ViewPanel vp = new ViewPanel();
 
-		ViewField vf = new ViewField(element);
+		ViewElement vf = new ViewElement(element);
+
+		storeViewFieldData(vf);
 
 		vp.addField(vf);
 
@@ -158,7 +187,9 @@ public class Load
 
 		ViewPanel vp = new ViewPanel();
 
-		ViewField vf = new ViewField(element);
+		ViewElement vf = new ViewElement(element);
+
+		storeViewFieldData(vf);
 
 		vp.addField(vf);
 
@@ -181,7 +212,7 @@ public class Load
 				if (hasChildElements(childElement) == false)
 				{
 
-					ViewField vf2 = new ViewField(childElement);
+					ViewElement vf2 = new ViewElement(childElement);
 
 					vp.addField(vf2);
 

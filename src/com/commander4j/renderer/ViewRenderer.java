@@ -1,4 +1,4 @@
-package com.commander4j.view;
+package com.commander4j.renderer;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,6 +22,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 
 import com.commander4j.sys.Common;
+import com.commander4j.view.ViewElement;
+import com.commander4j.view.ViewPanel;
+import com.commander4j.view.ViewTree;
 
 public class ViewRenderer extends JPanel implements TreeCellRenderer
 {
@@ -46,8 +49,8 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 	private ConcurrentHashMap<String, Icon> iconCache = new ConcurrentHashMap<>();
 	private final int iconSizePx;
 
-	private Border emptyLabel = new EmptyBorder(0, 5, 0, 5);
-	private Border emptyPanel = new EmptyBorder(3, 0, 0, 0);
+	private Border emptyLabel = new EmptyBorder(3, 4, 0, 1);
+	private Border emptyPanel = new EmptyBorder(3, 4, 0, 1);
 
 	private FlowLayout layout = new FlowLayout(FlowLayout.LEADING, 0, 0);
 
@@ -91,14 +94,14 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 
 		if (userObj instanceof ViewPanel rd)
 		{
-			LinkedList<ViewField> fields = rd.getFields();
+			LinkedList<ViewElement> fields = rd.getFields();
 
 			// Lock each column to its preferred width
 
 			for (int col = 0; col < fields.size(); col++)
 			{
 
-				ViewField field = fields.get(col);
+				ViewElement field = fields.get(col);
 				String fn = getIconFilename(field);
 
 				JLabel lblName = new JLabel();
@@ -119,7 +122,6 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 				lblAttribs.setText(field.getAttributesDisplay());
 				lblAttribs.setBorder(emptyLabel);
 
-
 				if (!getIconFilename(field).isEmpty())
 				{
 					Icon icon = getIconFor(fn);
@@ -131,7 +133,6 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 				}
 
 				add(lblName);
-
 
 				add(lblValue);
 
@@ -236,41 +237,43 @@ public class ViewRenderer extends JPanel implements TreeCellRenderer
 		}
 	}
 
-	public String getElementDisplayName(ViewField field)
+	public String getElementDisplayName(ViewElement field)
 	{
 		String result = field.getElementName();
 
-		if (ViewTree.xmlTranslations.containsKey("element name:" + result) && isTranslationRequired())
+//		if (result.equals("description"))
+//			System.out.println();
+
+		if (isTranslationRequired())
 		{
-			result = ViewTree.xmlTranslations.get("element name:" + result);
+//			if (result.equals("description"))
+//				System.out.println();
+
+			result = Common.viewConfig.translations.getTranslation(Common.viewConfig.getLanguage(), "element name", result,result);
 		}
 
 		return result;
 	}
 
-
-
-	public String getElementDisplayValue(ViewField field)
+	public String getElementDisplayValue(ViewElement field)
 	{
 
 		String result = field.getElementValue().trim();
 
-		if (ViewTree.xmlTranslations.containsKey("element value:" + result) && isTranslationRequired())
+		if (isTranslationRequired())
 		{
-			result = getOpenBracketsElement() + ViewTree.xmlTranslations.get("element value:" + result) + getCloseBracketsElement();
+			result = Common.viewConfig.translations.getTranslation(Common.viewConfig.getLanguage(), "element value", result,result);
 		}
-		else
+
+		if (result.equals("") == false)
 		{
-			if (result.equals("") == false)
-			{
-				result = getOpenBracketsElement() + result + getCloseBracketsElement();
-			}
+			result = getOpenBracketsElement() + result + getCloseBracketsElement();
 		}
 
 		return result;
 	}
 
-	public String getIconFilename(ViewField field)
+	public String getIconFilename(ViewElement field)
 	{
 		String result = field.getElementFilename();
 

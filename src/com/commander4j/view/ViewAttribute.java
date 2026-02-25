@@ -1,5 +1,7 @@
 package com.commander4j.view;
 
+import com.commander4j.sys.Common;
+
 public class ViewAttribute
 {
 	private String attributeName="";
@@ -32,9 +34,9 @@ public class ViewAttribute
 	{
 		String result = getAttributeName();
 
-		if (ViewTree.xmlTranslations.containsKey("attribute name:" + result) && isTranslationRequired())
+		if (isTranslationRequired())
 		{
-			result = ViewTree.xmlTranslations.get("attribute name:" + result);
+			result = Common.viewConfig.translations.getTranslation(Common.viewConfig.getLanguage(), "attribute name", result,result);
 		}
 
 		return result;
@@ -45,9 +47,9 @@ public class ViewAttribute
 
 		String result = getAttributeValue().trim();
 
-		if (ViewTree.xmlTranslations.containsKey("attribute value:" + result) && isTranslationRequired())
+		if (isTranslationRequired())
 		{
-			result = getOpenBracketsElement() + ViewTree.xmlTranslations.get("attribute value:" + result) + getCloseBracketsElement();
+			result = getOpenBracketsElement() + Common.viewConfig.translations.getTranslation(Common.viewConfig.getLanguage(), "attribute value", result,result)+ getCloseBracketsElement();
 		}
 		else
 		{

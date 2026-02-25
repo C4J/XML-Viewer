@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.commander4j.sys.Common;
+import com.commander4j.view.ViewTranslations;
 import com.commander4j.xml.DomText;
 
 public class ViewConfig
@@ -33,6 +34,9 @@ public class ViewConfig
     private boolean viewIcons = true;
     private boolean viewTrans = true;
     private boolean viewBrackets = true;
+    public ViewTranslations translations = new ViewTranslations();
+
+	// Language - XMLType - Name - Value
 
 	public boolean isViewMode()
 	{
