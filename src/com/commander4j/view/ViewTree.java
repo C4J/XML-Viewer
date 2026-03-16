@@ -55,7 +55,7 @@ import com.commander4j.util.Utility;
 public final class ViewTree extends JFrame
 {
 	public static String title1 = "XML Viewer - Version ";
-	public static String version = "1.50";
+	public static String version = "1.51";
 
 	private static final long serialVersionUID = 1L;
 
@@ -288,11 +288,18 @@ public final class ViewTree extends JFrame
 		viewMode.setPreferredSize(buttonSize);
 		viewMode.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
-			{
-				loadXML(loadXML);
-				TreeModeChange(TreeDisplayAction.Reload);
-			}
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        buttonState();              // keep your status/icons in sync
+		        if (loadXML != null)
+		        {
+		            loadXML(loadXML);       // rebuild model once
+		        }
+		        else
+		        {
+		            clearTree();
+		        }
+		    }
 		});
 		toolBarSide.add(viewMode);
 
