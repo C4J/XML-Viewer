@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<display>
+    <language code="en">
+        <type id="attribute name">
+            <translation from="_" to=""/>
+        </type>
+        <type id="attribute value">
+            <translation from="_" to=""/>
+        </type>
+        <type id="element name">
+            <translation from="ABWKZ" to="Deviation indicator"/>
+            <translation from="ADATU" to="Date of last change"/>
+            <translation from="AENAM" to="Name of person who changed object"/>
+            <translation from="ALAND" to="Country of departure"/>
+            <translation from="ALNAL" to="Alternative number of label"/>
+            <translation from="ALPHA" to="ALPHA Conversion"/>
+            <translation from="ALTSL" to="Alternative item strategy"/>
+            <translation from="ANP" to="Number of days of supply"/>
+            <translation from="ANTEI" to="Share of a product in a bundle"/>
+            <translation from="ANZPR" to="Number of forecast periods"/>
+            <translation from="APOKZ" to="Indicator: Category is a subcategory"/>
+            <translation from="ARCKEY" to="Key for external message archive"/>
+            <translation from="AUMNG" to="Order quantity for JIT delivery schedules"/>
+            <translation from="AUSDT" to="Date of last forecast"/>
+            <translation from="AUSSS" to="Indicator: External sorting (assortment)"/>
+            <translation from="AWSLS" to="Variance key"/>
+            <translation from="BASMG" to="Base quantity"/>
+            <translation from="BDATU" to="Batch record created on"/>
+            <translation from="BEARZ" to="Processing time"/>
+            <translation from="BESKZ" to="Procurement type"/>
+            <translation from="BETA1" to="BETA Factor"/>
+            <translation from="BISMT" to="Old material number"/>
+            <translation from="BKLAS" to="Valuation class"/>
+            <translation from="BLANZ" to="Number of sheets"/>
+            <translation from="BREIT" to="Width"/>
+            <translation from="BRGEW" to="Gross weight"/>
+            <translation from="BSKRF" to="Order entry quantity"/>
+            <translation from="BSTFE" to="Order acknowledgment requirement"/>
+            <translation from="BSTMA" to="Maximum lot size"/>
+            <translation from="BSTME" to="Order unit"/>
+            <translation from="BSTMI" to="Minimum lot size"/>
+            <translation from="BSTRF" to="Rounding value for purchase order quantity"/>
+            <translation from="BWKEY" to="Valuation area"/>
+            <translation from="BWPEI" to="Period indicator for shelf life expiration date"/>
+            <translation from="BWPH1" to="Posting period value 1"/>
+            <translation from="BWPRH" to="Commercial price per unit"/>
+            <translation from="BWPRS" to="Moving average price"/>
+            <translation from="BWPS1" to="Price control value 1"/>
+            <translation from="BWVA2" to="Valuation variant 2"/>
+            <translation from="CAPAUSE" to="Capacity usage"/>
+            <translation from="CIMTYP" to="Extension (defined by customer)"/>
+            <translation from="COMPL" to="Completeness indicator"/>
+            <translation from="CREDAT" to="Created on"/>
+            <translation from="CRETIM" to="Created at"/>
+            <translation from="DAYS_BEFORE_SALV" to="Days before salvage date"/>
+            <translation from="DELTA" to="Delta Factor"/>
+            <translation from="DIRECT" to="Direction"/>
+            <translation from="DISLS" to="Distribution profile of material in warehouse complex"/>
+            <translation from="DISMM" to="MRP profile"/>
+            <translation from="DISPO" to="MRP controller"/>
+            <translation from="DOCNUM" to="IDoc number"/>
+            <translation from="DOCREL" to="SAP Release for IDoc"/>
+            <translation from="DPLHO" to="Planning strategy group"/>
+            <translation from="DWERK" to="Planning plant"/>
+            <translation from="DZEIT" to="Planned delivery time in days"/>
+            <translation from="E1MAKTM" to="IDoc segment: Material description"/>
+            <translation from="E1MARAM" to="IDoc segment: Material master general data"/>
+            <translation from="E1MARCM" to="IDoc segment: Plant data for material"/>
+            <translation from="E1MARDM" to="IDoc segment: Storage location data for material"/>
+            <translation from="E1MARMM" to="IDoc segment: Units of measure for material"/>
+            <translation from="E1MBEWM" to="IDoc segment: Material valuation"/>
+            <translation from="E1MEANM" to="IDoc segment: Material EAN numbers"/>
+            <translation from="E1MKALM" to="IDoc segment: Material BOM links"/>
+            <translation from="E1MLANM" to="IDoc segment: Tax classification"/>
+            <translation from="E1MLGNM" to="IDoc segment: Material data for warehouse number"/>
+            <translation from="E1MPGDM" to="IDoc segment: Planning data"/>
+            <translation from="E1MPOPM" to="Master material forecast parameter"/>
+            <translation from="E1MTXHM" to="Master material long text header"/>
+            <translation from="E1MTXLM" to="Master material long text line"/>
+            <translation from="E1MVEGM" to="IDoc segment: Sales data"/>
+            <translation from="E1MVEUM" to="IDoc segment: Sales organization data"/>
+            <translation from="E1MVKEM" to="IDoc segment: Sales data for distribution channel"/>
+            <translation from="EAN11" to="International Article Number (EAN/UPC)"/>
+            <translation from="EANTP" to="Category of international article number (EAN)"/>
+            <translation from="EDI_DC40" to="IDoc control record for interface to external system"/>
+            <translation from="EDI_DS40" to="IDoc Status Record for Interface to External System"/>
+            <translation from="EFMNG" to="Quantity to be issued"/>
+            <translation from="EISBE" to="Safety stock"/>
+            <translation from="EISLO" to="Fixed lot size"/>
+            <translation from="EKALR" to="Material is costed with quantity structure"/>
+            <translation from="EKGRP" to="Purchasing group"/>
+            <translation from="EKWSL" to="Purchasing value key"/>
+            <translation from="EPSIL" to="Epsilon Factor"/>
+            <translation from="ERGEW" to="Gross weight of material"/>
+            <translation from="ERNAM" to="Name of person who created the object"/>
+            <translation from="ERSDA" to="Created on"/>
+            <translation from="ERTAG" to="Day on which material expires"/>
+            <translation from="ERVOL" to="Volume of material"/>
+            <translation from="EWAHR" to="Expected vendor"/>
+            <translation from="EXPRSS" to="Overriding in inbound processing"/>
+            <translation from="FEVOR" to="Production scheduler"/>
+            <translation from="FHORI" to="Scheduling margin key for floats"/>
+            <translation from="FIMON" to="Fixed Periods"/>
+            <translation from="FIXLS" to="Fixed lot size"/>
+            <translation from="FLDNAM" to="Field name"/>
+            <translation from="FLDVAL" to="Field value"/>
+            <translation from="FRTME" to="Production unit"/>
+            <translation from="FUELG" to="Filling quantity for packaged product"/>
+            <translation from="FXHOR" to="Planning time fence"/>
+            <translation from="GAMMA" to="Gamma Factor"/>
+            <translation from="GEWEI" to="Weight unit"/>
+            <translation from="GEWTO" to="Allowed packaging weight"/>
+            <translation from="GEWTO_NEW" to="Allowed packaging weight (new)"/>
+            <translation from="GLN_NUMBER" to="Global Location Number"/>
+            <translation from="GROES" to="Size/dimensions."/>
+            <translation from="GTIN_VARIANT" to="Global Trade Item Number variant"/>
+            <translation from="GWER1" to="Basic value of the 2nd order"/>
+            <translation from="GWER2" to="Basic quantity of the 2nd order"/>
+            <translation from="GWERT" to="Basic Value"/>
+            <translation from="HERKL" to="Country of origin of the material"/>
+            <translation from="HKMAT" to="Material origin group"/>
+            <translation from="HOEHE" to="Height"/>
+            <translation from="HPEAN" to="Hierarchy EAN"/>
+            <translation from="IDOC" to="IDoc number"/>
+            <translation from="IDOCTYP" to="Name of basic type"/>
+            <translation from="IPKRZ_PAL" to="Indicator: Palletization"/>
+            <translation from="IPRKZ" to="Period indicator"/>
+            <translation from="KALKL" to="Cost estimate number - plant"/>
+            <translation from="KALN1" to="Cost estimate number - quantity structure"/>
+            <translation from="KALNR" to="Cost estimate number for cost est. w/o qty structure"/>
+            <translation from="KAUSF" to="Automatic purchase order allowed"/>
+            <translation from="KONDM" to="Material pricing group"/>
+            <translation from="KOSGR" to="Costing lot size"/>
+            <translation from="KOVBW" to="Valuation class determination"/>
+            <translation from="KTGRM" to="Account assignment group for this material"/>
+            <translation from="KZDKZ" to="Documentation indicator"/>
+            <translation from="KZEXI" to="Indicator: Material can be co-product"/>
+            <translation from="KZZUL" to="Approved batch record required"/>
+            <translation from="LADGR" to="Loading group"/>
+            <translation from="LAEDA" to="Date of last change"/>
+            <translation from="LAENG" to="Length"/>
+            <translation from="LBSTF" to="Labelling form"/>
+            <translation from="LETY1" to="Unit of issue 1"/>
+            <translation from="LFGJA" to="Fiscal year of current period"/>
+            <translation from="LFMNG" to="Delivery quantity"/>
+            <translation from="LFMON" to="Current period (posting period)"/>
+            <translation from="LFNUM" to="Delivery number"/>
+            <translation from="LGBKZ" to="Warehouse management activation indicator"/>
+            <translation from="LGNUM" to="Warehouse number"/>
+            <translation from="LGORT" to="Storage location"/>
+            <translation from="LGPRO" to="Storage location for EP"/>
+            <translation from="LGRAD" to="Degree of processing"/>
+            <translation from="LHME1" to="Loading height 1"/>
+            <translation from="LHMG1" to="Load weight 1"/>
+            <translation from="LHMG2" to="Load weight 2"/>
+            <translation from="LHMG3" to="Load weight 3"/>
+            <translation from="LMINB" to="Minimum remaining shelf life"/>
+            <translation from="LOGDAT" to="Date of status information values"/>
+            <translation from="LOGGR" to="Logistics handling group"/>
+            <translation from="LOGTIM" to="Time of status information values"/>
+            <translation from="LOSFX" to="Lot size"/>
+            <translation from="LOSGR" to="Lot size procedure"/>
+            <translation from="LTINC" to="Indicator: Long text exists"/>
+            <translation from="LTKZA" to="Storage condition"/>
+            <translation from="LTKZE" to="Storage conditions indicator"/>
+            <translation from="LVSME" to="Unit of issue for SD"/>
+            <translation from="MABST" to="Release creation for production orders"/>
+            <translation from="MAKTX" to="Material description"/>
+            <translation from="MANDT" to="Client"/>
+            <translation from="MATKL" to="Material group"/>
+            <translation from="MATNR" to="Material number"/>
+            <translation from="MAXLS" to="Maximum lot size"/>
+            <translation from="MAXLZ" to="Maximum storage period"/>
+            <translation from="MAX_STACK" to="Maximum stacking"/>
+            <translation from="MBRSH" to="Industry sector"/>
+            <translation from="MEABM" to="Unit of measure for ABC indicator"/>
+            <translation from="MEINH" to="Alternative unit of measure"/>
+            <translation from="MEINS" to="Base unit of measure"/>
+            <translation from="MESCOD" to="Message code"/>
+            <translation from="MESFCT" to="Message Function"/>
+            <translation from="MESTYP" to="Message type"/>
+            <translation from="MHDHB" to="Total shelf life"/>
+            <translation from="MHDLP" to="Percentage of total shelf life for price calculation"/>
+            <translation from="MHDRZ" to="Minimum remaining shelf life"/>
+            <translation from="MINBE" to="Reorder point"/>
+            <translation from="MINLS" to="Minimum lot size"/>
+            <translation from="MKAPV" to="Capacity usage"/>
+            <translation from="MLAST" to="Current planning strategy group"/>
+            <translation from="MLMAA" to="Material: active in material ledger"/>
+            <translation from="MMSTA" to="Plant-specific material status"/>
+            <translation from="MMSTD" to="Date from which the plant-specific material status is valid"/>
+            <translation from="MODAV" to="Mean Absolute Deviation"/>
+            <translation from="MSGFN" to="Function"/>
+            <translation from="MSTAE" to="Cross-plant material status"/>
+            <translation from="MSTDE" to="Date from which the X-plant material status is valid"/>
+            <translation from="MSTDV" to="Date from which the X-distr.-chain material status is valid"/>
+            <translation from="MTART" to="Material type"/>
+            <translation from="MTPOS" to="General item category group"/>
+            <translation from="MTPOS_MARA" to="Item category group from material master"/>
+            <translation from="MTVFP" to="Availability check"/>
+            <translation from="MVGR1" to="Material group 1"/>
+            <translation from="NEST_FTR" to="Nesting factor"/>
+            <translation from="NTGEW" to="Net weight"/>
+            <translation from="NUMTP" to="Number type"/>
+            <translation from="OBJID" to="Object ID"/>
+            <translation from="OUTMOD" to="Output mode"/>
+            <translation from="PDATL" to="Validity start date of first plant forecast parameter record"/>
+            <translation from="PDATV" to="Validity end date of last plant forecast parameter record"/>
+            <translation from="PDATZ" to="Date of last forecast"/>
+            <translation from="PEINH" to="Price unit"/>
+            <translation from="PERAN" to="Number of Historical Periods"/>
+            <translation from="PEREX" to="Personal Exemptions"/>
+            <translation from="PERIN" to="Period Indicator"/>
+            <translation from="PERIO" to="Period"/>
+            <translation from="PERKZ" to="Period indicator"/>
+            <translation from="PLANT_MHDHB" to="Plant total shelf life"/>
+            <translation from="PLANT_MHDRZ" to="Plant minimum remaining shelf life"/>
+            <translation from="PLIFZ" to="Planned delivery time in days"/>
+            <translation from="PLNNR" to="Task list number"/>
+            <translation from="PLNTY" to="Task list type"/>
+            <translation from="PPRDL" to="Period profile for forecasting"/>
+            <translation from="PPRDV" to="Period profile for forecast transfer"/>
+            <translation from="PPRDZ" to="Period profile for safety time/actual values"/>
+            <translation from="PRCTR" to="Profit center"/>
+            <translation from="PRDAT" to="Price Determination Date"/>
+            <translation from="PREND" to="Forecast end date"/>
+            <translation from="PRENG" to="Forecast parameter end date"/>
+            <translation from="PRFRQ" to="Forecast period"/>
+            <translation from="PRMAD" to="Mean Absolute Deviation (MAD)"/>
+            <translation from="PRMOD" to="Forecast model"/>
+            <translation from="PRODH" to="Product hierarchy"/>
+            <translation from="PSTAT" to="Maintenance status"/>
+            <translation from="QMATA" to="Inspection setup"/>
+            <translation from="QMPUR" to="QM control key"/>
+            <translation from="RAUBE" to="Rough-cut planning indicator"/>
+            <translation from="RCVLAD" to="Logical address of recipient"/>
+            <translation from="RCVPFC" to="Partner function of recipient"/>
+            <translation from="RCVPOR" to="Receiver port"/>
+            <translation from="RCVPRN" to="Partner Number of Receiver"/>
+            <translation from="RCVPRT" to="Partner Type of Receiver"/>
+            <translation from="RCVSAD" to="Recipient address (SADR)"/>
+            <translation from="RDMHD" to="Rounding rule for calculation of SLED"/>
+            <translation from="REFGRP" to="Message group (EDI Message Group)"/>
+            <translation from="REFINT" to="Transmission file (EDI Interchange)"/>
+            <translation from="REFMES" to="Message (EDI Message)"/>
+            <translation from="REPID" to="Program"/>
+            <translation from="ROTATION_DATE" to="Rotation date"/>
+            <translation from="RUEZT" to="Setup time"/>
+            <translation from="SCMNG" to="Scheduled quantity"/>
+            <translation from="SEGNUM" to="Segment Number"/>
+            <translation from="SERIAL" to="Serialization"/>
+            <translation from="SFCPF" to="Production scheduling profile"/>
+            <translation from="SHFLG" to="Indicator: Relevant for Hazardous Substances"/>
+            <translation from="SHZET" to="Setup and teardown time"/>
+            <translation from="SIGGR" to="Tracking limit"/>
+            <translation from="SKTOF" to="Cash discount indicator"/>
+            <translation from="SLED_BBD" to="Expiration date"/>
+            <translation from="SNDLAD" to="Logical address of sender"/>
+            <translation from="SNDPFC" to="Partner Function of Sender"/>
+            <translation from="SNDPOR" to="Sender port (SAP System, external subsystem)"/>
+            <translation from="SNDPRN" to="Partner Number of Sender"/>
+            <translation from="SNDPRT" to="Partner type of sender"/>
+            <translation from="SNDSAD" to="Sender address (SADR)"/>
+            <translation from="SPART" to="Division"/>
+            <translation from="SPRAS" to="Language key"/>
+            <translation from="SPRAS_ISO" to="Language according to ISO 639"/>
+            <translation from="SSQSS" to="Control key for quality management in sales and distribution"/>
+            <translation from="STAMID" to="Status Message Identification"/>
+            <translation from="STAMNO" to="Status Message Identification"/>
+            <translation from="STAMQU" to="Status message qualifier"/>
+            <translation from="STAPA1" to="Status Parameter 1"/>
+            <translation from="STAPA2" to="Status Parameter 2"/>
+            <translation from="STAPA3" to="Status Parameter 3"/>
+            <translation from="STAPA4" to="Status Parameter 4"/>
+            <translation from="STATUS" to="Status of IDoc"/>
+            <translation from="STATXT" to="Status Text"/>
+            <translation from="STATYP" to="Type of system error message (A, W, E, S, I)."/>
+            <translation from="STD" to="EDI standard, flag"/>
+            <translation from="STDMES" to="EDI message type"/>
+            <translation from="STDVRS" to="EDI standard, version and release"/>
+            <translation from="STFAK" to="Splitting indicator"/>
+            <translation from="STLAL" to="Alternative BOM"/>
+            <translation from="STLAN" to="BOM usage"/>
+            <translation from="STPRS" to="Standard price"/>
+            <translation from="STRGR" to="Strategy group"/>
+            <translation from="TABNAM" to="Name of Table Structure"/>
+            <translation from="TAKZT" to="Cycle time"/>
+            <translation from="TATY1" to="Tax category 1"/>
+            <translation from="TATY2" to="Tax category 2"/>
+            <translation from="TATY3" to="Tax category 3"/>
+            <translation from="TAXM1" to="Tax classification material"/>
+            <translation from="TAXM2" to="Tax classification 2"/>
+            <translation from="TAXM3" to="Tax classification 3"/>
+            <translation from="TDFORMAT" to="Tag column"/>
+            <translation from="TDID" to="Name of the text"/>
+            <translation from="TDLINE" to="Text Line"/>
+            <translation from="TDNAME" to="Name of the text"/>
+            <translation from="TDOBJECT" to="Application object of the text"/>
+            <translation from="TDSPRAS" to="Name of the text"/>
+            <translation from="TDTEXTTYPE" to="Text Format"/>
+            <translation from="TEMPB" to="Temperature conditions indicator"/>
+            <translation from="TEST" to="Test flag"/>
+            <translation from="TEXT1" to="Text field 1"/>
+            <translation from="TRAGR" to="Transportation group"/>
+            <translation from="TRAME" to="Transport means"/>
+            <translation from="TRANZ" to="Transit time"/>
+            <translation from="TWERT" to="Trend Value"/>
+            <translation from="UEETK" to="Unlimited overdelivery allowed"/>
+            <translation from="UEETO" to="Overdelivery tolerance limit"/>
+            <translation from="UMLMC" to="Revaluation class"/>
+            <translation from="UMREN" to="Numerator for conversion to base units of measure"/>
+            <translation from="UMREZ" to="Denominator for conversion to base units of measure"/>
+            <translation from="UNAME" to="User Name"/>
+            <translation from="UNETO" to="Underdelivery tolerance limit"/>
+            <translation from="USEQU" to="Quota arrangement usage"/>
+            <translation from="VBAMG" to="Order quantity for JIT delivery schedules"/>
+            <translation from="VBEAZ" to="Processing time in days"/>
+            <translation from="VBWRT" to="Usage value"/>
+            <translation from="VERID" to="Production version"/>
+            <translation from="VERPR" to="Moving average price"/>
+            <translation from="VERS1" to="Version 1"/>
+            <translation from="VERS2" to="Version 2"/>
+            <translation from="VERS3" to="Version 3"/>
+            <translation from="VERSG" to="Material statistics group"/>
+            <translation from="VERTO" to="Allowed packaging volume"/>
+            <translation from="VINT1" to="Interval 1"/>
+            <translation from="VINT2" to="Interval 2"/>
+            <translation from="VJBKL" to="Valuation class of previous year"/>
+            <translation from="VJBWH" to="Inventory at the beginning of previous year"/>
+            <translation from="VJBWS" to="Inventory value at beginning of previous year"/>
+            <translation from="VJPEI" to="Price unit of previous year"/>
+            <translation from="VJSTP" to="Standard price in previous year"/>
+            <translation from="VJVER" to="Price determination in previous year"/>
+            <translation from="VJVPR" to="Moving average price/periodic unit price in previous year"/>
+            <translation from="VKORG" to="Sales organization"/>
+            <translation from="VMBKL" to="Valuation class of previous month"/>
+            <translation from="VMFSU" to="Trend value of the previous period"/>
+            <translation from="VMGW1" to="Base value of the second order in the previous period"/>
+            <translation from="VMGW2" to="Base value of the second order in previous period"/>
+            <translation from="VMGWE" to="Basic value of previous period"/>
+            <translation from="VMPEI" to="Price unit of previous month"/>
+            <translation from="VMSTD" to="Date of last revaluation of previous month"/>
+            <translation from="VMSTP" to="Standard price in previous month"/>
+            <translation from="VMVER" to="Price determination in previous month"/>
+            <translation from="VMVPR" to="Moving average price/periodic unit price in previous month"/>
+            <translation from="VOLEH" to="Volume unit"/>
+            <translation from="VOLTO" to="Allowed packaging volume"/>
+            <translation from="VOLTO_NEW" to="Allowed packaging volume (new)"/>
+            <translation from="VOLUM" to="Volume"/>
+            <translation from="VPLPR" to="Planned price"/>
+            <translation from="VPRSV" to="Price control indicator"/>
+            <translation from="VPSTA" to="Maintenance status of complete material"/>
+            <translation from="VRBDT" to="Date of last revaluation"/>
+            <translation from="VRBFK" to="Previous valuation type"/>
+            <translation from="VRKME" to="Sales unit"/>
+            <translation from="VRMOD" to="Forecast model"/>
+            <translation from="VRVEZ" to="Consumption period"/>
+            <translation from="VTWEG" to="Distribution channel"/>
+            <translation from="VVJLB" to="Fiscal year variant JIT"/>
+            <translation from="VVMLB" to="Last fiscal year variant valuation"/>
+            <translation from="VVSAL" to="Proposed fiscal year variant"/>
+            <translation from="VZUSL" to="Surcharge/discount indicator for issue storage location"/>
+            <translation from="WEBAZ" to="Goods receipt processing time in days"/>
+            <translation from="WERKS" to="Plant"/>
+            <translation from="WESCH" to="Quantity structure"/>
+            <translation from="WZEIT" to="Goods receipt processing time in days"/>
+            <translation from="XCHPF" to="Batch management requirement indicator"/>
+            <translation from="ZKDAT" to="Date as of which no new changeable items are created"/>
+            <translation from="ZKPRS" to="Pricing data"/>
+            <translation from="ZMATMAS03" to="IDoc type for material master"/>
+            <translation from="ZPLD1" to="Production load 1"/>
+            <translation from="ZPLD2" to="Production load 2"/>
+            <translation from="ZPLD3" to="Production load 3"/>
+            <translation from="ZPLP1" to="Production plan 1"/>
+            <translation from="ZPLP2" to="Production plan 2"/>
+            <translation from="ZPLP3" to="Production plan 3"/>
+            <translation from="ZPLPR" to="Planned price"/>
+            <translation from="_-GLB_-RGTE1MARCMBBD" to="Retail global extension: Plant minimum remaining shelf life"/>
+            <translation from="_-GLB_-RGTFLDGRP" to="Retail global extension: Field group"/>
+            <translation from="_-NESGLB_-DISTR000" to="Nestlé global extension: Distribution data"/>
+            <translation from="_-NESGLB_-E1MARAM000" to="Nestlé global extension: Material general data"/>
+            <translation from="_-NESGLB_-E1MARMM000" to="Nestlé global extension: Material units of measure"/>
+        </type>
+        <type id="element value">
+            <translation from="_" to=""/>
+        </type>
+    </language>
+</display>

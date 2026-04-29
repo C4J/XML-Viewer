@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display>
+    <language code="en">
+        <type id="element name">
+            <translation from="enableEmailNotifications" to="Email"/>
+            <translation from="retainOriginalFilename" to="Retain Original Filename"/>
+            <translation from="enabled" to="Enabled"/>
+            <translation from="retryOpenFileCount" to="Max Retries"/>
+            <translation from="version" to="Ver"/>
+            <translation from="emailEmailNotifications" to="Email Notify"/>
+            <translation from="retryOpenFileCount" to="Retries"/>
+            <translation from="statusReportTime" to="Report Time"/>
+            <translation from="description" to=""/>
+            <translation from="logArchiveRetentionDays" to="Log Retention (days)"/>
+            <translation from="retryOpenFileDelay" to="Retry Delay (ms)"/>
+            <translation from="type" to="Type"/>
+            <translation from="input" to="Input "/>
+            <translation from="output" to="Output"/>
+            <translation from="map" to="Map"/>
+            <translation from="maps" to="Maps"/>
+            <translation from="xsl" to="Stylesheet"/>
+            <translation from="host" to="Host"/>
+            <translation from="ip" to="IP Address"/>
+            <translation from="port" to="Port"/>
+            <translation from="repeat" to="Repeat"/>
+            <translation from="ascii" to="ASCII"/>
+            <translation from="id" to="ID"/>
+            <translation from="path" to="Path"/>
+            <translation from="csv" to="CSV"/>
+            <translation from="email" to="EMAIL"/>
+            <translation from="XSLTPath" to="XLST Path"/>
+            <translation from="logPath" to="Log Path"/>
+            <translation from="emailListID" to="Distribution List"/>
+            <translation from="subject" to="Subject"/>
+            <translation from="message" to="Message"/>
+            <translation from="use83GUID" to="MSDOS Format Files"/>
+            <translation from="mask" to="Filename Mask"/>
+            <translation from="pattern" to="Pattern"/>
+            <translation from="csvOptions" to="CSV Options"/>
+            <translation from="optionDelimeter" to="Option Delimiter"/>
+            <translation from="url" to="URL"/>
+            <translation from="connectors" to="Connectors"/>
+            <translation from="comparitor" to="Comparitor"/>
+            <translation from="config" to="Config File"/>
+            <translation from="prefix" to="File Prefix"/>
+            <translation from="condition" to="Condition"/>
+            <translation from="fileExtension" to="File Extension"/>
+            <translation from="pollingInterval" to="Polling Interval (ms)"/>
+        </type>
+        <type id="element value">
+            <translation from="_aaa" to=""/>
+        </type>
+        <type id="attribute name">
+            <translation from="_bbb" to=""/>
+        </type>
+        <type id="attribute value">
+            <translation from="_ccc" to=""/>
+        </type>
+    </language>
+</display>

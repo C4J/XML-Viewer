@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+	<defaults>
+		<inputPath>/Users/test/Downloads/MATMAS05 IDoc.xml</inputPath>
+		<translation>matmas05.xml</translation>
+		<treeExpansion>4</treeExpansion>
+		<language>en</language>
+		<viewMode>true</viewMode>
+		<viewTrans>true</viewTrans>
+		<viewBrackets>true</viewBrackets>
+		<viewIcons>true</viewIcons>
+	</defaults>
+	<options>
+		<languages>
+			<language>en</language>
+			<language>fr</language>
+			<language>de</language>
+			<language>it</language>
+		</languages>
+	</options>
+</config>
