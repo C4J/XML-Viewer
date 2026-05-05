@@ -55,7 +55,7 @@ import com.commander4j.util.Utility;
 public final class ViewTree extends JFrame
 {
 	public static String title1 = "XML Viewer - Version ";
-	public static String version = "2.00";
+	public static String version = "2.01";
 
 	private static final long serialVersionUID = 1L;
 
